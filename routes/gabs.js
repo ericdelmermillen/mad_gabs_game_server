@@ -5,7 +5,6 @@ const videosFilePath = './data/videos.json';
 const madGabsEasyPath = './data/madGabsEasy.json';
 const madGabsMediumPath = './data/madGabsMedium.json';
 const madGabsHardPath = './data/madGabsHard.json';
-const { v4: uuidv4 } = require('uuid');
 
 
 // get easy gabs route

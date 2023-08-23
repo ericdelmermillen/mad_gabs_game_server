@@ -1,10 +1,10 @@
 {
-  "name": "eric-millen-brain-flix-api",
+  "name": "mad_gabs_game_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "devServer": "nodemon index.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",

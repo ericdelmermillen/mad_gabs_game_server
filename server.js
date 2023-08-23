@@ -5,7 +5,6 @@ const path = require('path');
 const router = express.Router();
 const routes = require("./routes/gabs").router; 
 
-// console.log("index")
 
 const app = express();
  
@@ -14,19 +13,16 @@ const corsOptions = {
 }
 
 app.use(express.json());
+
 app.use(cors(corsOptions));
 
 require('dotenv').config();
 
-// Allow access to assets folder
+// Allow access to assets folder: probaly don't need this
 app.use(express.static('./assets'));
 
 // allows access to built in json parsing method
 app.use(express.json());
-
-
-// const videosFilePath = './data/videos.json';
-const madGabsEasyPath = './data/madGabsEasy.json';
 
 
 // Routes:
