@@ -17,7 +17,7 @@ router.route('/easy')
         const madGabsEasyData = JSON.parse(data);
         res.json(madGabsEasyData);
         
-        console.log("easy")
+        // console.log("easy")
       } catch (error) {
       console.error(error);
     }
@@ -27,7 +27,7 @@ router.route('/easy')
 // get medium gabs route
 router.route('/medium')
   .get((req, res) => {
-    console.log("medium")
+    // console.log("medium")
   fs.readFile(madGabsMediumPath, (err, data) => {
     try {
       const madGabsMediumPath = JSON.parse(data);
@@ -42,7 +42,7 @@ router.route('/medium')
 // get hard gabs route
 router.route('/hard')
   .get((req, res) => {
-    console.log("hard")
+    // console.log("hard")
   fs.readFile(madGabsHardPath, (err, data) => {
     try {
       const madGabsHardPath = JSON.parse(data);
