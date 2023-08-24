@@ -1,14 +1,14 @@
 [ 
-  {"Knoll Heft Earn" : ["No", "Left", "Turn"]},
-  {"Broth Errands Hissed Her" : ["Brother", "And", "Sister"]},
-  {"Aim Odours Highs Gull" : ["A", "Motorcycle"]},
-  {"Age Happen He Scar" : ["A", "Japanese", "Car"]},
-  {"Dawned Rink Hand Arrive" : ["Don't", "Drink", "And", "Drive"]},
-  {"Ache Inks High Sped" : ["A", "King", "Size", "Bed"]},
-  {"Burr Itch Overt Rubble Otter" : ["Bridge", "Over", "Troubled", "Water"]},
-  {"Eighty Part Mints Tore" : ["A", "Department", "Store"]},
-  {"Eight Hoist Oar" : ["A", "Toy", "Store"]},
-  {"House Wheat This Hound" : ["How", "Sweet", "The", "Sound"]}
+  [["Knoll Heft Earn"], ["no", "left", "turn"]],
+  [["Broth Errands Hissed Her"], ["brother", "and", "sister"]],
+  [["Aim Odours Highs Gull"], ["a", "motorcycle"]],
+  [["Age Happen He Scar"], ["a", "Japanese", "car"]],
+  [["Dawned Rink Hand Arrive"], ["don't", "drink", "and", "drive"]],
+  [["Ache Inks High Sped"], ["a", "king", "size", "bed"]],
+  [["Burr Itch Overt Rubble Otter"], ["bridge", "over", "troubled", "water"]],
+  [["Eighty Part Mints Tore"], ["a", "department", "store"]],
+  [["Eight Hoist Oar"], ["a", "toy", "store"]],
+  [["House Wheat This Hound"], ["how", "sweet", "the", "sound"]]
 ]
 
 

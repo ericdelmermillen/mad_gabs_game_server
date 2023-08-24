@@ -1,13 +1,13 @@
 [
-  { "Abe An An Appeal" : ["A", "Banana", "Peel"] },
-  { "Cough He Anchor Ream" : ["Coffee", "And", "Cream"]},
-  {"Ache Arf Own" : ["A", "Car", "Phone"]},
-  {"Stirring Beak He Knee" : ["String", "Bikini"]},
-  {"Abe Less Sing" : ["A", "Blessing"]},
-  {"Hiney Duck Hiss" : ["I", "Need", "A", "Kiss"]},
-  {"Faye Stew Phase" : ["Face", "To", "Face"]},
-  {"May Pulls Ear Up" : ["Maple", "Syrup"]},
-  {"Dawn Jury Memeber" : ["Don't", "You", "Remember"]},
-  {"Reel Ace Shun Ship" : ["Relationship"]}
+  [["Abe An An Appeal"], ["a", "banana", "peel"]],
+  [["Cough He Anchor Ream"], ["coffee", "and", "cream"]],
+  [["Ache Arf Own"], ["a", "car", "phone"]],
+  [["Stirring Beak He Knee"], ["string", "bikini"]],
+  [["Abe Less Sing"], ["a", "blessing"]],
+  [["Hiney Duck Hiss"], ["I", "need", "a", "kiss"]],
+  [["Faye Stew Phase"], ["face", "to", "face"]],
+  [["May Pulls Ear Up"], ["maple", "syrup"]],
+  [["Dawn Jury Memeber"], ["don't", "you", "remember"]],
+  [["Reel Ace Shun Ship"], ["relationship"]]
 ]
 
