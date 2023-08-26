@@ -1,59 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const videosFilePath = './data/videos.json';
-const madGabsEasyPath = './data/madGabsEasy.json';
-const madGabsMediumPath = './data/madGabsMedium.json';
-const madGabsHardPath = './data/madGabsHard.json';
+const { promisify } = require('util');
+const readFileAsync = promisify(fs.readFile);
 
+const madGabsPaths = {
+  easy: './data/madGabsEasy.json',
+  medium: './data/madGabsMedium.json',
+  hard: './data/madGabsHard.json',
+};
 
-// get easy gabs route
-router.route('/easy')
-
-  .get((req, res) => {
-    fs.readFile(madGabsEasyPath, (err, data) => {
-      try {
-        const madGabsEasyData = JSON.parse(data);
-        res.json(madGabsEasyData);
-        
-        // console.log("easy")
-      } catch (error) {
-      console.error(error);
-    }
-  })
-});
-
-// get medium gabs route
-router.route('/medium')
-  .get((req, res) => {
-    // console.log("medium")
-  fs.readFile(madGabsMediumPath, (err, data) => {
+function getRandomGab(path) {
+  return async (req, res) => {
     try {
-      const madGabsMediumPath = JSON.parse(data);
-      res.json(madGabsMediumPath);
-      
+      const data = await readFileAsync(path);
+      const gabArray = JSON.parse(data);
+      const randomIndex = Math.floor(Math.random() * gabArray.length);
+      const randomGab = gabArray[randomIndex];
+      res.json(randomGab);
     } catch (error) {
       console.error(error);
+      res.status(500).send('Internal Server Error');
     }
-  })
-});
+  };
+}
 
-// get hard gabs route
-router.route('/hard')
-  .get((req, res) => {
-    // console.log("hard")
-  fs.readFile(madGabsHardPath, (err, data) => {
-    try {
-      const madGabsHardPath = JSON.parse(data);
-      res.json(madGabsHardPath);
-      
-    } catch (error) {
-      console.error(error);
-    }
-  })
-});
-
+router.route('/easy').get(getRandomGab(madGabsPaths.easy));
+router.route('/medium').get(getRandomGab(madGabsPaths.medium));
+router.route('/hard').get(getRandomGab(madGabsPaths.hard));
 
 module.exports = {
-  router
-}
+  router,
+};

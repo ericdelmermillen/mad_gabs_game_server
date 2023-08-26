@@ -4,6 +4,10 @@ server-side to dos:
 
 1) define needed routes
 
+/login
+/login/tutorial/:page
+/home // level selection
+
 2) refactor /easy, /medium, /hard routes to serve random gab for each call
 
 
