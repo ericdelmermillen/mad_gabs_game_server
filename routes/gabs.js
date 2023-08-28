@@ -4,6 +4,8 @@ const fs = require('fs');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 
+const gabsRouter = require('express').Router();
+
 const madGabsPaths = {
   easy: './data/madGabsEasy.json',
   medium: './data/madGabsMedium.json',
@@ -25,10 +27,24 @@ function getRandomGab(path) {
   };
 }
 
-router.route('/easy').get(getRandomGab(madGabsPaths.easy));
-router.route('/medium').get(getRandomGab(madGabsPaths.medium));
-router.route('/hard').get(getRandomGab(madGabsPaths.hard));
+// router.route('/easy').get(getRandomGab(madGabsPaths.easy));
+// router.route('/medium').get(getRandomGab(madGabsPaths.medium));
+// router.route('/hard').get(getRandomGab(madGabsPaths.hard));
 
-module.exports = {
-  router,
-};
+
+gabsRouter.route('/easy').get(getRandomGab(madGabsPaths.easy));
+gabsRouter.route('/medium').get(getRandomGab(madGabsPaths.medium));
+gabsRouter.route('/hard').get(getRandomGab(madGabsPaths.hard));
+
+
+router.route('/submit')
+  .post((req, res) => {
+    console.log("from gab")
+    const submitted_gab_question = req.body.submitted_gab_question; 
+    const submitted_gab_answer = req.body.submitted_gab_answer; 
+    res.json({ success: true, submitted_gab_question: `Submitted Gab Question: ${submitted_gab_question}. Submitted Gab Question: ${submitted_gab_answer}` });
+});
+
+
+// module.exports = router;
+module.exports = gabsRouter;
