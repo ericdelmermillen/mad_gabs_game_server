@@ -6,16 +6,14 @@ const nodemailer = require('nodemailer')
 
 const submitRouter = require('express').Router();
 
-const {EMAIL, PASSWORD} = require("../env");
-
 submitRouter.route('/gab')
   .post(async (req, res) => {
 
     let config = {
       service : 'gmail',
       auth: {
-        user: EMAIL,
-        pass: PASSWORD
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       }
     }
 
