@@ -1,13 +1,11 @@
 const knex = require("knex")(require("../knexfile"));
 const config = require("../utils/config");
 
-
 const getRandom = (req, res) => {
   
   knex("gabs")
   .select("*")
-  .where({ level: req.headers.level })
-  // .where({ level: req.body.level })
+  .where({ level: req.query.level })
     .then((gabs) => {
       if (gabs.length === 0) {
         return res

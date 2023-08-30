@@ -1,4 +1,3 @@
-
 // getPoints for when user gets question correct
 
 const getPoints = (secondsRemaining) => {

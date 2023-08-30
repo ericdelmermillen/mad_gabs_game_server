@@ -22,17 +22,9 @@ function getRandomGab(path) {
 }
 
 gabsRouter.route('/').get(gabsController);
-gabsRouter.route('/').post(gabsController);
-// gabsRouter.route('/hard').get(gabsController);
-
-// gabsRouter.route('/').post(getRandomGab(gabsController.easy));
-// gabsRouter.route('/medium').get(getRandomGab(madGabsPaths.medium));
-// gabsRouter.route('/hard').get(getRandomGab(madGabsPaths.hard));
-
 
 router.route('/submit')
   .post((req, res) => {
-    console.log("from gab")
     const submitted_gab_question = req.body.submitted_gab_question; 
     const submitted_gab_answer = req.body.submitted_gab_answer; 
     res.json({ success: true, submitted_gab_question: `Submitted Gab Question: ${submitted_gab_question}. Submitted Gab Question: ${submitted_gab_answer}` });
