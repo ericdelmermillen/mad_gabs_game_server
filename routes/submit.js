@@ -9,6 +9,11 @@ const submitRouter = require('express').Router();
 submitRouter.route('/gab')
   .post(async (req, res) => {
 
+    res.status(201)
+      .json({
+        message: "Thanks for the suggested Gab!"
+      })
+
     let config = {
       service : 'gmail',
       auth: {
@@ -29,10 +34,10 @@ submitRouter.route('/gab')
 
     transporter.sendMail(message).then((info) => {
 
-      return res.status(201)
-      .json({
-        message: "Thanks for the suggested Gab!"
-      })
+      // return res.status(201)
+      // .json({
+      //   message: "Thanks for the suggested Gab!"
+      // })
       
     }).catch(error => {
       return res.status(500).json({ error })
