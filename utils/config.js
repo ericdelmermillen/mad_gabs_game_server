@@ -4,3 +4,13 @@ const GABS_COLUMNS = [
   "gab_answer",
   "level"
 ];
+
+const USERS_COLUMNS = [
+  "id",
+  "email",
+  "userName",
+  "accountType",
+  "createdAt",
+  "lastSessionStart",
+  "totalPoints"
+];

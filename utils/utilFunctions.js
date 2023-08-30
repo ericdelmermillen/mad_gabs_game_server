@@ -21,9 +21,6 @@ const has24HoursElapsed = (timestamp) => {
 console.log(has24HoursElapsed(1692823914592));  
      
 
-
-
-
 module.exports = {
   getPoints, 
   has24HoursElapsed

@@ -14,6 +14,13 @@ server-side to dos:
 3) create route to handle sending email on receiving submit request
 
 
-*** can I speed up nodemailer?
+User account needs for database:
+--userId (primary)
+--email
+--username
+--total points
+--account type (free or premium)
+-account created timestamp
+--last login timestamp
 
  -->
