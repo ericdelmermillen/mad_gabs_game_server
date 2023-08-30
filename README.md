@@ -14,6 +14,6 @@ server-side to dos:
 3) create route to handle sending email on receiving submit request
 
 
-
+*** can I speed up nodemailer?
 
  -->

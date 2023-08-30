@@ -1,16 +1,10 @@
 const express = require('express');
-const router = express.Router();
 const fs = require('fs');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
-
+const gabsController = require("../controllers/gabs_controller");
 const gabsRouter = require('express').Router();
-
-const madGabsPaths = {
-  easy: './data/madGabsEasy.json',
-  medium: './data/madGabsMedium.json',
-  hard: './data/madGabsHard.json',
-};
+const router = express.Router();
 
 function getRandomGab(path) {
   return async (req, res) => {
@@ -27,14 +21,13 @@ function getRandomGab(path) {
   };
 }
 
-// router.route('/easy').get(getRandomGab(madGabsPaths.easy));
-// router.route('/medium').get(getRandomGab(madGabsPaths.medium));
-// router.route('/hard').get(getRandomGab(madGabsPaths.hard));
+gabsRouter.route('/').get(gabsController);
+gabsRouter.route('/').post(gabsController);
+// gabsRouter.route('/hard').get(gabsController);
 
-
-gabsRouter.route('/easy').get(getRandomGab(madGabsPaths.easy));
-gabsRouter.route('/medium').get(getRandomGab(madGabsPaths.medium));
-gabsRouter.route('/hard').get(getRandomGab(madGabsPaths.hard));
+// gabsRouter.route('/').post(getRandomGab(gabsController.easy));
+// gabsRouter.route('/medium').get(getRandomGab(madGabsPaths.medium));
+// gabsRouter.route('/hard').get(getRandomGab(madGabsPaths.hard));
 
 
 router.route('/submit')
@@ -46,5 +39,4 @@ router.route('/submit')
 });
 
 
-// module.exports = router;
 module.exports = gabsRouter;

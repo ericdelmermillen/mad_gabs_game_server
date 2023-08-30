@@ -1,11 +1,16 @@
 const cors = require('cors');
 const express = require('express');
+const passport = require('passport'); 
+// const GoogleStrategy = require('passport-google-oauth20').Strategy; 
 const app = express();
 const fs = require('fs');
+
+// const authRouter = require("./routes/auth")
 
 const gabsRouter = require("./routes/gabs")
 
 const submitRouter = require("./routes/submit")
+
 
 app.use(express.json());
 
@@ -23,11 +28,16 @@ require('dotenv').config();
 app.use(express.json());
 
 
+// Use the routes from auth.js
+// app.use('/auth', authRouter);
+
 // // Use the routes from gabs.js
 app.use('/gabs', gabsRouter);
 
 // Use the routes from submit.js
 app.use('/submit', submitRouter);
+
+// *** may want to add /submit/contact in my submit route
 
 
 const port = process.env.PORT || 8080;
