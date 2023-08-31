@@ -1,34 +1,61 @@
-const express = require('express');
 const fs = require('fs');
 const usersController = require("../controllers/users_controller");
 const { promisify } = require('util');
 
 const usersRouter = require('express').Router();
-const router = express.Router();
+
+const passport = require("passport");
+
+const CLIENT_URL = "http://localhost:3000";
+
+// const router = require('express').Router();
 
 
-// authRouter.
-//   get('/google', passport.authenticate('google', { scope: ['profile', 'email'], session: false }));
 
-// authRouter.
-//   get('/google/redirect', passport.authenticate('google', { session: false, failureRedirect: `https://localhost:3000/login` }), (req, res) => {
-//   res.redirect(req.user); //req.user has the redirection_url
+// usersRouter.
+//   get("/", (req, res) => {
+//     res.status(200).json({
+//       message: "yo from users",
+//   })
 // });
 
 
-function getRandomGab(path) {
-  return async (req, res) => {
-    try {
-      const data = await readFileAsync(path);
-      const gabArray = JSON.parse(data);
-      const randomIndex = Math.floor(Math.random() * gabArray.length);
-      const randomGab = gabArray[randomIndex];
-      res.json(randomGab);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+usersRouter.
+  get("/login/success", (req, res) => {
+    if (req.user) {
+      res.status(200).json({
+        success: true,
+        message: "successfull",
+        user: req.user,
+        // cookies: req.cookies
+      });
     }
-  };
-}
+  });
+
+  usersRouter.
+    get("/login/failed", (req, res) => {
+    res.status(401).json({
+      success: false,
+      message: "failed to authenticate",
+    });
+});
+
+usersRouter.
+  get("/logout", (req, res) => {
+    req.logout();
+    res.redirect(CLIENT_URL);
+  });
+
+usersRouter.
+  get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+usersRouter.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: CLIENT_URL,
+    failureRedirect: "/login/failed",
+  })
+);
 
 module.exports = usersRouter;
+// module.exports = router;

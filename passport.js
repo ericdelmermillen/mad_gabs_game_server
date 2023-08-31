@@ -1,32 +1,47 @@
-require('dotenv').config();
-
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+// const GithubStrategy = require("passport-github2").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
+const passport = require("passport");
 
-passport.use(new GoogleStrategy(
+const GOOGLE_CLIENT_ID='614954374727-55n61iodkc61nkdpmcrbm640fl9utafq.apps.googleusercontent.com'
+const GOOGLE_CLIENT_SECRET = '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'
+
+GITHUB_CLIENT_ID = "your id";
+GITHUB_CLIENT_SECRET = "your id";
+
+FACEBOOK_APP_ID = "your id";
+FACEBOOK_APP_SECRET = "your id";
+
+passport.use(
+  new GoogleStrategy(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:8080",
+      callbackURL: "/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, done) {
       done(null, profile);
-    // function (accessToken, refreshToken, profile, cb) {
-    //   Usser.findOrCreate({ googleID: profile.id}, function (err, user) {
-    //     return cb(err, user)
-    //   })
     }
-  ));
+  )
+);
 
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: FACEBOOK_APP_ID,
+      clientSecret: FACEBOOK_APP_SECRET,
+      callbackURL: "/auth/facebook/callback",
+    },
+    function (accessToken, refreshToken, profile, done) {
+      done(null, profile);
+    }
+  )
+);
 
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
 
-// const GOOGLE_CLIENT_ID = env.process.GOOGLE_CLIENT_ID
-// const GOOGLE_CLIENT_ID = env.process.GOOGLE_CLIENT_SECRET
-
-const GOOGLE_CLIENT_ID = "614954374727-55n61iodkc61nkdpmcrbm640fl9utafq.apps.googleusercontent.com";
-
-const GOOGLE_CLIENT_SECRET = "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"
-
-
-
-
-console.log(GOOGLE_CLIENT_ID)
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
