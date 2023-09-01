@@ -1,27 +1,24 @@
 const cookieSession = require("cookie-session");
-const express = require('express');
-const cors = require('cors');
-const passportSetup = require("./passport")
-const passport = require('passport'); 
+const express = require("express");
+const cors = require("cors");
+const passportSetup = require("./passport");
+const passport = require("passport");
 
-const authRoute = require("./routes/auth"); // change this path after 
-
+const authRoute = require("./routes/auth");
 const gabsRouter = require("./routes/gabs");
-
 const submitRouter = require("./routes/submit");
- 
+const usersRouter = require("./routes/users");
+
 const app = express();
 
 require('dotenv').config();
 
 app.use(
-  cookieSession({ name: "session", keys: ["lama"], maxAge: 24 * 60 * 60 * 100 })
+  cookieSession({ name: "session", keys: ["Eric"], maxAge: 24 * 60 * 60 * 100 })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(express.json());
 
 const corsOptions = {
   origin: 'http://localhost:3000',
@@ -30,24 +27,17 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-// allows access to built in json parsing method
 app.use(express.json());
 
-
-// Use the routes from auth.js
-app.use('/auth', authRoute);
-
-// // Use the routes from gabs.js
+app.use("/auth", authRoute);
+app.use("/users", usersRouter);
 app.use('/gabs', gabsRouter);
-
-// Use the routes from submit.js
 app.use('/submit', submitRouter);
 
 
-// *** may want to add /submit/contact in my submit route
+// const port = process.env.PORT;
+const port = 5000;
 
-
-const port = process.env.PORT || 8080;
-
-app.listen(port, () => console.log(`Listening on ${port}`));
+app.listen(port, () => {
+  console.log(`Listening on port: ${port}`);
+});

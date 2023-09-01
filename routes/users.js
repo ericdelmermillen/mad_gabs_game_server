@@ -4,58 +4,28 @@ const { promisify } = require('util');
 
 const usersRouter = require('express').Router();
 
-const passport = require("passport");
-
-const CLIENT_URL = "http://localhost:3000";
-
-// const router = require('express').Router();
-
-
-
-// usersRouter.
-//   get("/", (req, res) => {
-//     res.status(200).json({
-//       message: "yo from users",
-//   })
-// });
-
+const { getPoints } = require('../utils/utilFunctions.js');
 
 usersRouter.
-  get("/login/success", (req, res) => {
-    if (req.user) {
-      res.status(200).json({
-        success: true,
-        message: "successfull",
-        user: req.user,
-        // cookies: req.cookies
-      });
-    }
-  });
-
-  usersRouter.
-    get("/login/failed", (req, res) => {
-    res.status(401).json({
-      success: false,
-      message: "failed to authenticate",
-    });
+get("/", (req, res) => {
+    res.status(200).json({
+      message: "yo from users",
+  })
 });
 
-usersRouter.
-  get("/logout", (req, res) => {
-    req.logout();
-    res.redirect(CLIENT_URL);
-  });
 
 usersRouter.
-  get("/google", passport.authenticate("google", { scope: ["profile"] }));
+  // route('/postpoints')
+  post('/post-points',(req, res) => {
+    const points = getPoints(req.body.secondsRemaining);
 
-usersRouter.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
-);
+    
+    if (points !== null) {
+      res.status(200).json({ points });
+    } else {
+      res.status(500).json({ error: "Failed to fetch points" });
+    }
+});
+
 
 module.exports = usersRouter;
-// module.exports = router;
