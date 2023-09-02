@@ -7,13 +7,19 @@ const CLIENT_URL = "http://localhost:3000/";
 router.get("/login/success", (req, res) => {
   if (req.user) {
     console.log("yo from success")
+    
+    // success path needs to get data from database and attach it to req.user
     req.user.userName = "genericEric",
+    req.user.totalPoints = 1000,
+    req.user.ranking = {userRank: 7, totalPlayers: 11},
+    //
     res.status(200).json({
       success: true,
       message: "successfull",
       user: req.user,
-      // cookies: req.cookies
+      cookies: req.cookies
     });
+    console.log(req.user)
   } else {
     res.status(404).json({
       success: "false",
@@ -33,7 +39,6 @@ router.get("/login/failed", (req, res) => {
 router.get("/logout", (req, res) => {
   req.logout();
   res.redirect(CLIENT_URL);
-  console.log("logout")
 });
 
 router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
