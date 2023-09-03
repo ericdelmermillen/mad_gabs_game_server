@@ -16,7 +16,7 @@ router.get("/login/success", (req, res) => {
   if (req.user) {
 
 
-  console.log(req.user)
+  // console.log(req.user)
 /*
 
 --need to give user a jwt; create it and send in the response 
