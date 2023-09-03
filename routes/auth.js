@@ -11,6 +11,29 @@ const CLIENT_URL = "http://localhost:3000/";
 const userDataFilePath = "./usersData/usersData.json";
 // 
 
+// google user email signin path
+router.post("/user", (req, res) => {
+  
+  if(!req.body.email || !req.body.password) {
+    return res.status(401).json({
+      message: "failure"
+    });
+  }
+  // req.user needs to be what is retrieved by the DB
+  req.user = {},
+  req.user.userName = "generic3ric",
+  req.user.totalPoints = 696969,
+  req.user.ranking = {userRank: 69, totalPlayers: 69},
+  
+  res.json({
+    success: true,
+    message: "successfull",
+    user: req.user,
+    cookies: req.cookies
+  });
+  console.log(req.user)
+});
+
 // google success path
 router.get("/login/success", (req, res) => {
   if (req.user) {
@@ -31,7 +54,7 @@ router.get("/login/success", (req, res) => {
     req.user.ranking = {userRank: 7, totalPlayers: 11},
     req.user.mgdbNum = 1;
     //
-    res.status(200).json({
+    res.json({
       success: true,
       message: "successfull",
       user: req.user,
