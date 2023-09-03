@@ -17,6 +17,15 @@ get("/", (req, res) => {
 usersRouter.
   // route('/postpoints')
   post('/post-points',(req, res) => {
+
+  /*
+  --request needs to arrive with mgUserId, 
+  --need to authenticate the user's jwt
+  --
+    
+  */
+
+
     const points = getPoints(req.body.secondsRemaining);
 
     
