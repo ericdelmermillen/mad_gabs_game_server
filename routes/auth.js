@@ -10,25 +10,59 @@ const CLIENT_URL = "http://localhost:3000/";
 
 
 // *** user email signup path begins
-router.post("/user", (req, res) => {
-
-  if(!req.body.email || !req.body.password) {
+router.post("/user/signup", (req, res) => {
+  if (!req.body.email || !req.body.password) {
     return res.status(401).json({
-      message: "failure"
+      message: "Missing email or password",
     });
   }
-  // req.user needs to be what is retrieved by the DB
-  req.user = {},
-  // req.user.userName = "generic3ric",
-  req.user.userName = null,
-  req.user.totalPoints = 0,
-  req.user.ranking = {userRank: 69, totalPlayers: 69},
-  
-  res.json({
-    success: true,
-    message: "successfull",
-    user: req.user,
-    cookies: req.cookies
+
+  fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
+    if (readErr) {
+      console.error('Error reading user data:', readErr);
+      return res.status(500).json({ error: "Failed to read user data" });
+    }
+
+    const userData = JSON.parse(data);
+
+    // Check if the user with the provided email already exists
+    const userExists = userData.some((user) => user.email === req.body.email);
+
+    if (userExists) {
+      // User with that email already exists, send a "user exists" message
+      return res.status(409).json({
+        success: false,
+        message: "User with that email already exists",
+      });
+    }
+
+    // Create a new user object with the provided email and password
+    const newUser = {
+      mGUserId: userData.length + 1,
+      userName: null,
+      email: req.body.email,
+      password: req.body.password, // Make sure to hash the password in a real application
+      googleId: null,
+      facebookId: null,
+      totalPoints: 0,
+    };
+
+    // Add the new user to the user data array
+    userData.push(newUser);
+
+    // Write the updated user data back to the file
+    fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error('Error writing user data:', writeErr);
+        return res.status(500).json({ error: "Failed to update user data" });
+      }
+
+      res.json({
+        success: true,
+        message: "User created successfully",
+        user: newUser,
+      });
+    });
   });
 });
 // *** user email signup path ends
