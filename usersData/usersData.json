@@ -1,12 +1,12 @@
 [
   {
     "mGUserId": 1,
-    "userName": "HankHill!",
-    "email": "",
+    "userName": null,
+    "email": "hank@mail.com",
     "password": "myPass1234",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 79
+    "totalPoints": 790
   },
   {
     "mGUserId": 2,
@@ -91,11 +91,11 @@
   },
   {
     "mGUserId": 11,
-    "userName": "personalEric",
+    "userName": null,
     "email": null,
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 83
+    "totalPoints": 0
   }
 ]

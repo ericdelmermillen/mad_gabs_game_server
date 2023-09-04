@@ -9,7 +9,7 @@ const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/";
 
 
-// user email signup path
+// *** user email signup path begins
 router.post("/user", (req, res) => {
 
   if(!req.body.email || !req.body.password) {
@@ -31,31 +31,63 @@ router.post("/user", (req, res) => {
     cookies: req.cookies
   });
 });
+// *** user email signup path ends
 
 
-// *** user email signin path begins
-router.post("/user", (req, res) => {
+// *** user email login path begins
+router.post("/user/login", (req, res) => {
 
   if(!req.body.email || !req.body.password) {
     return res.status(401).json({
-      message: "failure"
+      message: "Missing email or password",
     });
   }
-  // req.user needs to be what is retrieved by the DB
-  req.user = {},
-  // req.user.userName = "generic3ric",
-  req.user.userName = null,
-  req.user.totalPoints = 0,
-  req.user.ranking = {userRank: 69, totalPlayers: 69},
-  
-  res.json({
-    success: true,
-    message: "successfull",
-    user: req.user,
-    cookies: req.cookies
+
+   // Read the user data from the JSON file
+   fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
+    if (readErr) {
+      console.error('Error reading user data:', readErr);
+      return res.status(500).json({ error: "Failed to read user data" });
+    }
+    const userData = JSON.parse(data);
+
+    // Check if the user with the provided email exists
+    const matchedUser = userData.find((user) => user.email === req.body.email);
+
+    if (!matchedUser) {
+      // User not found, send a "user not found" message
+      return res.status(404).json({
+        success: false,
+        message: "User with that email not found",
+      });
+    }
+
+    // Check if the provided password matches the stored password
+    if (matchedUser.password !== req.body.password) {
+      // Passwords do not match, send an "incorrect password" message
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
+    }
+
+    const matchedUserRank = [...userData]
+    .sort((x, y) =>  y.totalPoints - x.totalPoints)
+    .findIndex((user) => user.email === matchedUser.email);
+    
+    res.user = {};
+    res.user.mGUserId = matchedUser.mGUserId;
+    res.user.totalPoints = matchedUser.totalPoints;
+    res.user.userName = matchedUser.userName;
+    res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      user: res.user
+    });
   });
 });
-// *** user email signin path ends
 
 
 // *** google success path begins
