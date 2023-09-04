@@ -1,19 +1,17 @@
-const router = require("express").Router();
-const passport = require("passport");
-
-// 
 const fs = require('fs');
-// 
+const path = require('path');
+const router = require("express").Router();
+
+const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
+
+const passport = require("passport");
 
 const CLIENT_URL = "http://localhost:3000/";
 
-// 
-const userDataFilePath = "./usersData/usersData.json";
-// 
 
-// google user email signin path
+// user email signin path
 router.post("/user", (req, res) => {
-  
+
   if(!req.body.email || !req.body.password) {
     return res.status(401).json({
       message: "failure"
@@ -32,52 +30,87 @@ router.post("/user", (req, res) => {
     user: req.user,
     cookies: req.cookies
   });
-  console.log(req.user)
 });
+
 
 // google success path
 router.get("/login/success", (req, res) => {
   if (req.user) {
 
+    fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
+      if (readErr) {
+        console.error('Error reading user data:', readErr);
+        return res.status(500).json({ error: "Failed to read user data" });
+      }
 
-  // console.log(req.user)
-/*
+      const userData = JSON.parse(data);
 
---need to give user a jwt; create it and send in the response 
+      // console.log(userData)
 
---check database to see if user exists (find by google id)
+      const userExists = userData.some((user) => user.googleId == req.user.id);
 
---need to get data from database and attach it to req.user: needs userName, totalPoints, ranking, mgUserId
+      console.log("userExists: ", userExists)
 
-*/
-    // req.user.userName = "genericEric",
-    req.user.userName = null,
-    req.user.totalPoints = 1000,
-    req.user.ranking = {userRank: 7, totalPlayers: 11},
-    req.user.mgdbNum = 1;
-    //
-    res.json({
-      success: true,
-      message: "successfull",
-      user: req.user,
-      cookies: req.cookies
+      console.log("googleId at exists: ", req.user.id)
+
+      if (!userExists) {
+        // If the user does not exist, add them to the user data
+        const newUser = {
+          googleId: req.user.id,
+          userName: null, // Set the initial values as needed
+          totalPoints: 0,
+          ranking: { userRank: 7, totalPlayers: 11 },
+          mgdbNum: 1,
+        };
+
+        // Write the updated user data back to the file
+        fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
+          if (writeErr) {
+            console.error('Error writing user data:', writeErr);
+            return res.status(500).json({ error: "Failed to update user data" });
+          }
+
+          // Continue with the response
+          res.json({
+            success: true,
+            message: "User added successfully",
+            user: req.user,
+            cookies: req.cookies,
+          });
+        });
+      } else {
+        // user with that GoogleId exists
+        const matchedUser = userData.find((user) => user.googleId === req.user.id);
+
+        console.log("matchedUser: ", matchedUser)
+        console.log("userData: ", userData)
+
+        const matchedUserRank = [...userData]
+          .sort((x, y) =>  y.totalPoints - x.totalPoints)
+          .findIndex((user) => user.googleId === matchedUser.googleId);
+
+        res.user = {};
+        res.user.mGUserId = matchedUser.mGUserId;
+        res.user.totalPoints = matchedUser.totalPoints;
+        res.user.userName = matchedUser.userName;
+        res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+
+        res.json({
+          success: true,
+          message: "Login successful",
+          user: res.user,
+        });
+      }
     });
-    console.log(req.user)
   } else {
     res.status(404).json({
-      success: "false",
-      message: "unsuccessfull",
+      success: false,
+      message: "Unsuccessful",
     });
-    console.log("oh no")
+    console.log("Oh no");
   }
 });
 
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    success: false,
-    message: "failure",
-  });
-});
 
 router.get("/logout", (req, res) => {
   req.logout();
@@ -93,6 +126,12 @@ router.get(
     failureRedirect: "/login/failed",
   })
 );
+
+
+
+
+
+
 
 router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
 

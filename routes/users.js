@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const usersController = require("../controllers/users_controller");
-// const { promisify } = require('util');
 
 const usersRouter = require('express').Router();
 
@@ -15,7 +14,6 @@ usersRouter.
 });
 
 usersRouter.post("/username", (req, res) => {
-  // Use 'path' to construct file paths
   const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
 
   fs.readFile(userDataFilePath, 'utf8', (err, data) => {
@@ -28,49 +26,89 @@ usersRouter.post("/username", (req, res) => {
 
     const matchedUser = userData.find((user) => user.mGUserId === req.body.mGUserId);
 
-    const matchedUserRank = userData
+    const matchedUserRank = [...userData]
       .sort((x, y) =>  y.totalPoints - x.totalPoints)
       .findIndex((user) => user.mGUserId === req.body.mGUserId);
 
-    res.user = {};
-    res.user.mGUserId = matchedUser.mGUserId;
-    res.user.totalPoints = matchedUser.totalPoints;
-    res.user.userName = req.body.userName;
-    res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+    matchedUser.userName = req.body.userName;
 
-    res.json({
-      success: true,
-      message: "successful",
-      user: res.user,
+    fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error(writeErr);
+        return;
+      }
+
+      res.user = {};
+      res.user.mGUserId = matchedUser.mGUserId;
+      res.user.totalPoints = matchedUser.totalPoints;
+      res.user.userName = matchedUser.userName;
+      res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+
+      res.json({
+        success: true,
+        message: "Username updated successfully",
+        user: res.user,
+      });
     });
   });
 });
 
 
+usersRouter.post('/post-points', (req, res) => {
+  const mGUserId = req.body.mGUserId;
+  const secondsRemaining = req.body.secondsRemaining;
 
+  if (!mGUserId || secondsRemaining === undefined) {
+    return res.status(400).json({ error: "Bad request. Please provide mGUserId and secondsRemaining." });
+  }
 
+  const points = getPoints(secondsRemaining);
 
+  if (points !== null) {
+    const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
 
-usersRouter.
-  post('/post-points',(req, res) => {
+    fs.readFile(userDataFilePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Failed to read user data" });
+      }
 
-  /*
-  --request needs to arrive with mgUserId, 
-  --need to authenticate the user's jwt
-  --
-    
-  */
+      const userData = JSON.parse(data);
 
+      const matchedUser = userData.find((user) => user.mGUserId === mGUserId);
 
-    const points = getPoints(req.body.secondsRemaining);
+      if (!matchedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-    
-    if (points !== null) {
-      res.status(200).json({ points });
-    } else {
-      res.status(500).json({ error: "Failed to fetch points" });
-    }
+      matchedUser.totalPoints += points;
+
+      fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
+        if (writeErr) {
+          console.error(writeErr);
+          return res.status(500).json({ error: "Failed to update user points" });
+        }
+
+        // Respond with the updated user data
+        const matchedUserRank = userData
+          .sort((x, y) =>  y.totalPoints - x.totalPoints)
+          .findIndex((user) => user.mGUserId === mGUserId);
+
+        res.json({
+          success: true,
+          message: "Points updated successfully",
+          user: {
+            mGUserId: matchedUser.mGUserId,
+            totalPoints: matchedUser.totalPoints,
+            userName: matchedUser.userName,
+            ranking: { userRank: matchedUserRank + 1, totalPlayers: userData.length },
+          },
+        });
+      });
+    });
+  } else {
+    res.status(500).json({ error: "Failed to fetch points" });
+  }
 });
-
 
 module.exports = usersRouter;
