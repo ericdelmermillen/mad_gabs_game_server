@@ -82,11 +82,20 @@
   },
   {
     "mGUserId": 10,
-    "userName": "googleBuddy",
+    "userName": "devEric",
     "email": "",
     "password": "",
     "googleId": "107927815895635598617",
     "facebookId": null,
-    "totalPoints": 85
+    "totalPoints": 102
+  },
+  {
+    "mGUserId": 11,
+    "userName": "personalEric",
+    "email": null,
+    "password": null,
+    "googleId": "105807361221685176765",
+    "facebookId": null,
+    "totalPoints": 83
   }
 ]

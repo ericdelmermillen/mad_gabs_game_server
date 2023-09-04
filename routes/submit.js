@@ -8,8 +8,8 @@ const submitRouter = require('express').Router();
 submitRouter.route('/gab')
   .post(async (req, res) => {
 
-    console.log("from 5000")
-    console.log(req.query)
+    // console.log("from 5000")
+    // console.log(req.query)
 
     res.status(201)
       .json({

@@ -9,7 +9,7 @@ const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/";
 
 
-// user email signin path
+// user email signup path
 router.post("/user", (req, res) => {
 
   if(!req.body.email || !req.body.password) {
@@ -21,7 +21,7 @@ router.post("/user", (req, res) => {
   req.user = {},
   // req.user.userName = "generic3ric",
   req.user.userName = null,
-  req.user.totalPoints = 696969,
+  req.user.totalPoints = 0,
   req.user.ranking = {userRank: 69, totalPlayers: 69},
   
   res.json({
@@ -33,7 +33,32 @@ router.post("/user", (req, res) => {
 });
 
 
-// google success path
+// *** user email signin path begins
+router.post("/user", (req, res) => {
+
+  if(!req.body.email || !req.body.password) {
+    return res.status(401).json({
+      message: "failure"
+    });
+  }
+  // req.user needs to be what is retrieved by the DB
+  req.user = {},
+  // req.user.userName = "generic3ric",
+  req.user.userName = null,
+  req.user.totalPoints = 0,
+  req.user.ranking = {userRank: 69, totalPlayers: 69},
+  
+  res.json({
+    success: true,
+    message: "successfull",
+    user: req.user,
+    cookies: req.cookies
+  });
+});
+// *** user email signin path ends
+
+
+// *** google success path begins
 router.get("/login/success", (req, res) => {
   if (req.user) {
 
@@ -45,45 +70,36 @@ router.get("/login/success", (req, res) => {
 
       const userData = JSON.parse(data);
 
-      // console.log(userData)
-
       const userExists = userData.some((user) => user.googleId == req.user.id);
-
-      console.log("userExists: ", userExists)
-
-      console.log("googleId at exists: ", req.user.id)
-
+  
       if (!userExists) {
-        // If the user does not exist, add them to the user data
         const newUser = {
+          mGUserId: userData.length +1,
+          userName: null, 
+          email: null,
+          password: null,
           googleId: req.user.id,
-          userName: null, // Set the initial values as needed
+          facebookId: null,
           totalPoints: 0,
-          ranking: { userRank: 7, totalPlayers: 11 },
-          mgdbNum: 1,
         };
 
-        // Write the updated user data back to the file
+        userData.push(newUser);
+
         fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
           if (writeErr) {
             console.error('Error writing user data:', writeErr);
             return res.status(500).json({ error: "Failed to update user data" });
           }
 
-          // Continue with the response
           res.json({
             success: true,
-            message: "User added successfully",
-            user: req.user,
-            cookies: req.cookies,
+            message: "User created successfully",
+            user: newUser
           });
+          console.log(res.json)
         });
-      } else {
-        // user with that GoogleId exists
-        const matchedUser = userData.find((user) => user.googleId === req.user.id);
-
-        console.log("matchedUser: ", matchedUser)
-        console.log("userData: ", userData)
+        } else {
+          const matchedUser = userData.find((user) => user.googleId === req.user.id);
 
         const matchedUserRank = [...userData]
           .sort((x, y) =>  y.totalPoints - x.totalPoints)
@@ -111,7 +127,6 @@ router.get("/login/success", (req, res) => {
   }
 });
 
-
 router.get("/logout", (req, res) => {
   req.logout();
   res.redirect(CLIENT_URL);
@@ -126,11 +141,7 @@ router.get(
     failureRedirect: "/login/failed",
   })
 );
-
-
-
-
-
+// *** google sso ends
 
 
 router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));

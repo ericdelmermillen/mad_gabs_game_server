@@ -5,7 +5,7 @@ const getPoints = (secondsRemaining) => {
           : Math.round(100 - 100 / 60 * (60 - secondsRemaining)); 
 }
 
-console.log(getPoints(6))
+// console.log(getPoints(6))
 
 
 
@@ -16,7 +16,7 @@ const has24HoursElapsed = (timestamp) => {
   return Date.now() - timestamp >= twentyFourHoursInMilliseconds;
 }
 
-console.log(has24HoursElapsed(1692823914592));  
+// console.log(has24HoursElapsed(1692823914592));  
      
 
 module.exports = {
