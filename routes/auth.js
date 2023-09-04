@@ -21,7 +21,8 @@ router.post("/user", (req, res) => {
   }
   // req.user needs to be what is retrieved by the DB
   req.user = {},
-  req.user.userName = "generic3ric",
+  // req.user.userName = "generic3ric",
+  req.user.userName = null,
   req.user.totalPoints = 696969,
   req.user.ranking = {userRank: 69, totalPlayers: 69},
   
@@ -49,7 +50,8 @@ router.get("/login/success", (req, res) => {
 --need to get data from database and attach it to req.user: needs userName, totalPoints, ranking, mgUserId
 
 */
-    req.user.userName = "genericEric",
+    // req.user.userName = "genericEric",
+    req.user.userName = null,
     req.user.totalPoints = 1000,
     req.user.ranking = {userRank: 7, totalPlayers: 11},
     req.user.mgdbNum = 1;

@@ -1,1 +1,92 @@
-{"Eric": "Millen"}
+[
+  {
+    "mGUserId": 1,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 1234795486,
+    "facebookId": null,
+    "totalPoints": 79
+  },
+  {
+    "mGUserId": 2,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 2224795486,
+    "facebookId": 2224795486,
+    "totalPoints": 78
+  },
+  {
+    "mGUserId": 3,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 2224795486,
+    "facebookId": 2224795486,
+    "totalPoints": 77
+  },
+  {
+    "mGUserId": 4,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 2224795486,
+    "facebookId": 2224795486,
+    "totalPoints": 80
+  },
+  {
+    "mGUserId": 5,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 2224795488,
+    "facebookId": 2224795488,
+    "totalPoints": 81
+  },
+  {
+    "mGUserId": 6,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 2224795480,
+    "facebookId": 2224795480,
+    "totalPoints": 82
+  },
+  {
+    "mGUserId": 7,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 22247954765,
+    "facebookId": 22247954765,
+    "totalPoints": 82
+  },
+  {
+    "mGUserId": 8,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 22247954765,
+    "facebookId": 22247954765,
+    "totalPoints": 83
+  },
+  {
+    "mGUserId": 9,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 22247954765,
+    "facebookId": 22247954765,
+    "totalPoints": 84
+  },
+  {
+    "mGUserId": 10,
+    "userName": "",
+    "email": "",
+    "password": "myPass1234",
+    "googleId": 22247954765,
+    "facebookId": 22247954765,
+    "totalPoints": 85
+  }
+]
