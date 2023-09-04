@@ -9,53 +9,119 @@ const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/";
 
 
-// user email signup path
-router.post("/user", (req, res) => {
+// *** user email signup path begins
+router.post("/user/signup", (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    return res.status(401).json({
+      message: "Missing email or password",
+    });
+  }
+
+  fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
+    if (readErr) {
+      console.error('Error reading user data:', readErr);
+      return res.status(500).json({ error: "Failed to read user data" });
+    }
+
+    const userData = JSON.parse(data);
+
+    // Check if the user with the provided email already exists
+    const userExists = userData.some((user) => user.email === req.body.email);
+
+    if (userExists) {
+      // User with that email already exists, send a "user exists" message
+      return res.status(409).json({
+        success: false,
+        message: "User with that email already exists",
+      });
+    }
+
+    // Create a new user object with the provided email and password
+    const newUser = {
+      mGUserId: userData.length + 1,
+      userName: null,
+      email: req.body.email,
+      password: req.body.password, // Make sure to hash the password in a real application
+      googleId: null,
+      facebookId: null,
+      totalPoints: 0,
+    };
+
+    // Add the new user to the user data array
+    userData.push(newUser);
+
+    // Write the updated user data back to the file
+    fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error('Error writing user data:', writeErr);
+        return res.status(500).json({ error: "Failed to update user data" });
+      }
+
+      res.json({
+        success: true,
+        message: "User created successfully",
+        user: newUser,
+      });
+    });
+  });
+});
+// *** user email signup path ends
+
+
+// *** user email login path begins
+router.post("/user/login", (req, res) => {
 
   if(!req.body.email || !req.body.password) {
     return res.status(401).json({
-      message: "failure"
+      message: "Missing email or password",
     });
   }
-  // req.user needs to be what is retrieved by the DB
-  req.user = {},
-  // req.user.userName = "generic3ric",
-  req.user.userName = null,
-  req.user.totalPoints = 0,
-  req.user.ranking = {userRank: 69, totalPlayers: 69},
-  
-  res.json({
-    success: true,
-    message: "successfull",
-    user: req.user,
-    cookies: req.cookies
-  });
-});
 
+   // Read the user data from the JSON file
+   fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
+    if (readErr) {
+      console.error('Error reading user data:', readErr);
+      return res.status(500).json({ error: "Failed to read user data" });
+    }
+    const userData = JSON.parse(data);
 
-// *** user email signin path begins
-router.post("/user", (req, res) => {
+    // Check if the user with the provided email exists
+    const matchedUser = userData.find((user) => user.email === req.body.email);
 
-  if(!req.body.email || !req.body.password) {
-    return res.status(401).json({
-      message: "failure"
+    if (!matchedUser) {
+      // User not found, send a "user not found" message
+      return res.status(404).json({
+        success: false,
+        message: "User with that email not found",
+      });
+    }
+
+    // Check if the provided password matches the stored password
+    if (matchedUser.password !== req.body.password) {
+      // Passwords do not match, send an "incorrect password" message
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password",
+      });
+    }
+
+    const matchedUserRank = [...userData]
+    .sort((x, y) =>  y.totalPoints - x.totalPoints)
+    .findIndex((user) => user.email === matchedUser.email);
+    
+    res.user = {};
+    res.user.mGUserId = matchedUser.mGUserId;
+    res.user.totalPoints = matchedUser.totalPoints;
+    res.user.userName = matchedUser.userName;
+    res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      user: res.user
     });
-  }
-  // req.user needs to be what is retrieved by the DB
-  req.user = {},
-  // req.user.userName = "generic3ric",
-  req.user.userName = null,
-  req.user.totalPoints = 0,
-  req.user.ranking = {userRank: 69, totalPlayers: 69},
-  
-  res.json({
-    success: true,
-    message: "successfull",
-    user: req.user,
-    cookies: req.cookies
   });
 });
-// *** user email signin path ends
 
 
 // *** google success path begins
