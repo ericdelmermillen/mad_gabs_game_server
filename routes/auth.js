@@ -11,6 +11,7 @@ const CLIENT_URL = "http://localhost:3000/";
 
 // *** user email signup path begins
 router.post("/user/signup", (req, res) => {
+  console.log("from auth/user/signup")
   if (!req.body.email || !req.body.password) {
     return res.status(401).json({
       message: "Missing email or password",
