@@ -16,19 +16,23 @@ usersRouter.
 usersRouter.post("/username", (req, res) => {
   const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
 
+  console.log(req.body)
+
   fs.readFile(userDataFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
       return;
     }
 
+    console.log(req.body.mgUserId)
+
     const userData = JSON.parse(data);
 
-    const matchedUser = userData.find((user) => user.mGUserId === req.body.mGUserId);
+    const matchedUser = userData.find((user) => user.mgUserId === req.body.mgUserId);
 
     const matchedUserRank = [...userData]
       .sort((x, y) =>  y.totalPoints - x.totalPoints)
-      .findIndex((user) => user.mGUserId === req.body.mGUserId);
+      .findIndex((user) => user.mgUserId === req.body.mgUserId);
 
     matchedUser.userName = req.body.userName;
 
@@ -39,7 +43,7 @@ usersRouter.post("/username", (req, res) => {
       }
 
       res.user = {};
-      res.user.mGUserId = matchedUser.mGUserId;
+      res.user.mgUserId = matchedUser.mgUserId;
       res.user.totalPoints = matchedUser.totalPoints;
       res.user.userName = matchedUser.userName;
       res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
@@ -55,11 +59,11 @@ usersRouter.post("/username", (req, res) => {
 
 
 usersRouter.post('/post-points', (req, res) => {
-  const mGUserId = req.body.mGUserId;
+  const mgUserId = req.body.mgUserId;
   const secondsRemaining = req.body.secondsRemaining;
 
-  if (!mGUserId || secondsRemaining === undefined) {
-    return res.status(400).json({ error: "Bad request. Please provide mGUserId and secondsRemaining." });
+  if (!mgUserId || secondsRemaining === undefined) {
+    return res.status(400).json({ error: "Bad request. Please provide mgUserId and secondsRemaining." });
   }
 
   const points = getPoints(secondsRemaining);
@@ -75,7 +79,7 @@ usersRouter.post('/post-points', (req, res) => {
 
       const userData = JSON.parse(data);
 
-      const matchedUser = userData.find((user) => user.mGUserId === mGUserId);
+      const matchedUser = userData.find((user) => user.mgUserId === mgUserId);
 
       if (!matchedUser) {
         return res.status(404).json({ error: "User not found" });
@@ -92,16 +96,18 @@ usersRouter.post('/post-points', (req, res) => {
         // Respond with the updated user data
         const matchedUserRank = userData
           .sort((x, y) =>  y.totalPoints - x.totalPoints)
-          .findIndex((user) => user.mGUserId === mGUserId);
+          .findIndex((user) => user.mgUserId === mgUserId);
 
         res.json({
           success: true,
           message: "Points updated successfully",
           user: {
-            mGUserId: matchedUser.mGUserId,
+            mgUserId: matchedUser.mgUserId,
             totalPoints: matchedUser.totalPoints,
             userName: matchedUser.userName,
+            points: points,
             ranking: { userRank: matchedUserRank + 1, totalPlayers: userData.length },
+            
           },
         });
       });

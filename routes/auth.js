@@ -38,7 +38,7 @@ router.post("/user/signup", (req, res) => {
 
     // Create a new user object with the provided email and password
     const newUser = {
-      mGUserId: userData.length + 1,
+      mgUserId: userData.length + 1,
       userName: null,
       email: req.body.email,
       password: req.body.password, // Make sure to hash the password in a real application
@@ -70,6 +70,8 @@ router.post("/user/signup", (req, res) => {
 
 // *** user email login path begins
 router.post("/user/login", (req, res) => {
+  // console.log(first)
+  console.log(req.body)
 
   if(!req.body.email || !req.body.password) {
     return res.status(401).json({
@@ -110,7 +112,7 @@ router.post("/user/login", (req, res) => {
     .findIndex((user) => user.email === matchedUser.email);
     
     res.user = {};
-    res.user.mGUserId = matchedUser.mGUserId;
+    res.user.mgUserId = matchedUser.mgUserId;
     res.user.totalPoints = matchedUser.totalPoints;
     res.user.userName = matchedUser.userName;
     res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
@@ -140,7 +142,7 @@ router.get("/login/success", (req, res) => {
   
       if (!userExists) {
         const newUser = {
-          mGUserId: userData.length +1,
+          mgUserId: userData.length +1,
           userName: null, 
           email: null,
           password: null,
@@ -172,7 +174,7 @@ router.get("/login/success", (req, res) => {
           .findIndex((user) => user.googleId === matchedUser.googleId);
 
         res.user = {};
-        res.user.mGUserId = matchedUser.mGUserId;
+        res.user.mgUserId = matchedUser.mgUserId;
         res.user.totalPoints = matchedUser.totalPoints;
         res.user.userName = matchedUser.userName;
         res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };

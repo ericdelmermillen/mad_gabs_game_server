@@ -1,15 +1,15 @@
 [
   {
-    "mGUserId": 1,
-    "userName": null,
+    "mgUserId": 1,
+    "userName": "devEric",
     "email": "hank@mail.com",
     "password": "myPass1234",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 790
+    "totalPoints": 138
   },
   {
-    "mGUserId": 2,
+    "mgUserId": 2,
     "userName": "Peggy Hill!",
     "email": "",
     "password": "myPass1234",
@@ -18,7 +18,7 @@
     "totalPoints": 78
   },
   {
-    "mGUserId": 3,
+    "mgUserId": 3,
     "userName": "Amitha!",
     "email": "",
     "password": "myPass1234",
@@ -27,16 +27,16 @@
     "totalPoints": 77
   },
   {
-    "mGUserId": 4,
+    "mgUserId": 4,
     "userName": "Jesus Smith",
     "email": "",
     "password": "myPass1234",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 412
+    "totalPoints": 250
   },
   {
-    "mGUserId": 5,
+    "mgUserId": 5,
     "userName": "Bill!",
     "email": "",
     "password": "myPass1234",
@@ -45,7 +45,7 @@
     "totalPoints": 81
   },
   {
-    "mGUserId": 6,
+    "mgUserId": 6,
     "userName": "",
     "email": "",
     "password": "myPass1234",
@@ -54,7 +54,7 @@
     "totalPoints": 82
   },
   {
-    "mGUserId": 7,
+    "mgUserId": 7,
     "userName": "",
     "email": "",
     "password": "myPass1234",
@@ -63,7 +63,7 @@
     "totalPoints": 82
   },
   {
-    "mGUserId": 8,
+    "mgUserId": 8,
     "userName": "",
     "email": "",
     "password": "myPass1234",
@@ -72,7 +72,7 @@
     "totalPoints": 83
   },
   {
-    "mGUserId": 9,
+    "mgUserId": 9,
     "userName": "Jesus Smith",
     "email": "",
     "password": "myPass1234",
@@ -81,30 +81,39 @@
     "totalPoints": 93
   },
   {
-    "mGUserId": 10,
+    "mgUserId": 10,
     "userName": "devEric",
     "email": "",
     "password": "",
     "googleId": "107927815895635598617",
     "facebookId": null,
-    "totalPoints": 102
+    "totalPoints": 200
   },
   {
-    "mGUserId": 11,
+    "mgUserId": 11,
     "userName": null,
+    "email": "newEric@mail.com",
+    "password": "123",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 400
+  },
+  {
+    "mgUserId": 12,
+    "userName": "personalEric",
     "email": null,
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 0
+    "totalPoints": 300
   },
   {
-    "mGUserId": 12,
-    "userName": null,
-    "email": "newEric@mail.com",
-    "password": "myPass1234",
-    "googleId": null,
+    "mgUserId": 13,
+    "userName": "madameamy",
+    "email": null,
+    "password": null,
+    "googleId": "117980249371973609067",
     "facebookId": null,
-    "totalPoints": 0
+    "totalPoints": 500
   }
 ]
