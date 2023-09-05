@@ -6,7 +6,7 @@
     "password": "123",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 538
+    "totalPoints": 0
   },
   {
     "mgUserId": 2,
@@ -60,7 +60,7 @@
     "password": "myPass1234",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 82
+    "totalPoints": 89
   },
   {
     "mgUserId": 8,
@@ -87,7 +87,7 @@
     "password": "",
     "googleId": "107927815895635598617",
     "facebookId": null,
-    "totalPoints": 1100
+    "totalPoints": 1433
   },
   {
     "mgUserId": 11,
@@ -96,7 +96,7 @@
     "password": "123",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 400
+    "totalPoints": 0
   },
   {
     "mgUserId": 12,
@@ -105,7 +105,7 @@
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 2868
+    "totalPoints": 63
   },
   {
     "mgUserId": 13,
@@ -123,7 +123,7 @@
     "password": "bhhhjhjhj",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 0
+    "totalPoints": 18
   },
   {
     "mgUserId": 15,
@@ -132,7 +132,7 @@
     "password": "hankMail",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 0
+    "totalPoints": 97
   },
   {
     "mgUserId": 16,
@@ -168,7 +168,7 @@
     "password": "123",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 600
+    "totalPoints": 300
   },
   {
     "mgUserId": 20,
@@ -187,5 +187,41 @@
     "googleId": null,
     "facebookId": null,
     "totalPoints": 0
+  },
+  {
+    "mgUserId": 22,
+    "userName": "thisDude",
+    "email": "thisdude@mail.com",
+    "password": "123",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 0
+  },
+  {
+    "mgUserId": 23,
+    "userName": "eric05sept!",
+    "email": "eric05sept@mail.com",
+    "password": "123",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 0
+  },
+  {
+    "mgUserId": 24,
+    "userName": "thisGuy05sept",
+    "email": "thisguy@mail.com",
+    "password": "123",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 0
+  },
+  {
+    "mgUserId": 25,
+    "userName": "skyderman",
+    "email": "skyjust@mail.com",
+    "password": "123",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 18
   }
 ]
