@@ -37,21 +37,18 @@ router.post("/user/signup", (req, res) => {
       });
     }
 
-    // Create a new user object with the provided email and password
     const newUser = {
       mgUserId: userData.length + 1,
       userName: null,
       email: req.body.email,
-      password: req.body.password, // Make sure to hash the password in a real application
+      password: req.body.password,
       googleId: null,
       facebookId: null,
       totalPoints: 0,
     };
 
-    // Add the new user to the user data array
     userData.push(newUser);
 
-    // Write the updated user data back to the file
     fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
       if (writeErr) {
         console.error('Error writing user data:', writeErr);

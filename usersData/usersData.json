@@ -87,7 +87,7 @@
     "password": "",
     "googleId": "107927815895635598617",
     "facebookId": null,
-    "totalPoints": 1433
+    "totalPoints": 2729
   },
   {
     "mgUserId": 11,
@@ -105,7 +105,7 @@
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 63
+    "totalPoints": 152
   },
   {
     "mgUserId": 13,
@@ -223,5 +223,14 @@
     "googleId": null,
     "facebookId": null,
     "totalPoints": 18
+  },
+  {
+    "mgUserId": 26,
+    "userName": null,
+    "email": "email@email.com",
+    "password": "12345678",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 0
   }
 ]
