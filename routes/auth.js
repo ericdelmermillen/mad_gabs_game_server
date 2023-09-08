@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const router = require("express").Router();
+const jwt = require('jsonwebtoken');
 
 const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
 
@@ -11,7 +12,9 @@ const CLIENT_URL = "http://localhost:3000/";
 
 // *** user email signup path begins
 router.post("/user/signup", (req, res) => {
+
   console.log("from auth/user/signup")
+
   if (!req.body.email || !req.body.password) {
     return res.status(401).json({
       message: "Missing email or password",
@@ -37,6 +40,7 @@ router.post("/user/signup", (req, res) => {
       });
     }
 
+
     const newUser = {
       mgUserId: userData.length + 1,
       userName: null,
@@ -46,6 +50,9 @@ router.post("/user/signup", (req, res) => {
       facebookId: null,
       totalPoints: 0,
     };
+
+    // Sign the JWT with a secret key (replace 'yourSecretKey' with your actual secret key)
+    const token = jwt.sign(newUser, 'yourSecretKey', { expiresIn: '5m' });
 
     userData.push(newUser);
 
@@ -59,6 +66,7 @@ router.post("/user/signup", (req, res) => {
         success: true,
         message: "User created successfully",
         user: newUser,
+        token: token
       });
     });
   });
@@ -68,9 +76,8 @@ router.post("/user/signup", (req, res) => {
 
 // *** user email login path begins
 router.post("/user/login", (req, res) => {
-  // console.log(first)
-  console.log(req.body)
 
+  // console.log(first)
   if(!req.body.email || !req.body.password) {
     return res.status(401).json({
       message: "Missing email or password",
@@ -105,20 +112,24 @@ router.post("/user/login", (req, res) => {
       });
     }
 
+    // genereate jwt for email sign in users and attach
+
     const matchedUserRank = [...userData]
     .sort((x, y) =>  y.totalPoints - x.totalPoints)
     .findIndex((user) => user.email === matchedUser.email);
     
-    res.user = {};
-    res.user.mgUserId = matchedUser.mgUserId;
-    res.user.totalPoints = matchedUser.totalPoints;
-    res.user.userName = matchedUser.userName;
-    res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+    user = {};
+    user.mgUserId = matchedUser.mgUserId;
+    user.totalPoints = matchedUser.totalPoints;
+    user.userName = matchedUser.userName;
+    user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+    const token = jwt.sign(user, 'yourSecretKey', { expiresIn: '5m' });
 
     res.json({
       success: true,
       message: "Login successful",
-      user: res.user
+      user: user,
+      token: token
     });
   });
 });
@@ -157,10 +168,13 @@ router.get("/login/success", (req, res) => {
             return res.status(500).json({ error: "Failed to update user data" });
           }
 
+          const token = jwt.sign(newUser, 'yourSecretKey', { expiresIn: '5m' });
+
           res.json({
             success: true,
-            message: "User created successfully",
-            user: newUser
+            message: "Logged in successfully",
+            user: newUser,
+            token: token
           });
           console.log(res.json)
         });
@@ -171,16 +185,21 @@ router.get("/login/success", (req, res) => {
           .sort((x, y) =>  y.totalPoints - x.totalPoints)
           .findIndex((user) => user.googleId === matchedUser.googleId);
 
-        res.user = {};
-        res.user.mgUserId = matchedUser.mgUserId;
-        res.user.totalPoints = matchedUser.totalPoints;
-        res.user.userName = matchedUser.userName;
-        res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+          
+          user = {};
+          user.mgUserId = matchedUser.mgUserId;
+          user.totalPoints = matchedUser.totalPoints;
+          user.userName = matchedUser.userName;
+          user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+          
+        // genereate jwt for google users and attach
+        const token = jwt.sign(user, 'yourSecretKey', { expiresIn: '5m' });
 
         res.json({
           success: true,
           message: "Login successful",
-          user: res.user,
+          token: token,
+          user: user,
         });
       }
     });

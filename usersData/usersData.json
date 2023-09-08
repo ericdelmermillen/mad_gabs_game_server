@@ -87,7 +87,7 @@
     "password": "",
     "googleId": "107927815895635598617",
     "facebookId": null,
-    "totalPoints": 2729
+    "totalPoints": 9113
   },
   {
     "mgUserId": 11,
@@ -100,136 +100,10 @@
   },
   {
     "mgUserId": 12,
-    "userName": "personalEric",
+    "userName": null,
     "email": null,
     "password": null,
     "googleId": "105807361221685176765",
-    "facebookId": null,
-    "totalPoints": 152
-  },
-  {
-    "mgUserId": 13,
-    "userName": "madameamy",
-    "email": null,
-    "password": null,
-    "googleId": "117980249371973609067",
-    "facebookId": null,
-    "totalPoints": 500
-  },
-  {
-    "mgUserId": 14,
-    "userName": null,
-    "email": "gffghhhfgdfdfghggg",
-    "password": "bhhhjhjhj",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 18
-  },
-  {
-    "mgUserId": 15,
-    "userName": null,
-    "email": "myEmail@com.com",
-    "password": "hankMail",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 97
-  },
-  {
-    "mgUserId": 16,
-    "userName": "meUser",
-    "email": "me@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 100
-  },
-  {
-    "mgUserId": 17,
-    "userName": null,
-    "email": "myMail@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 18,
-    "userName": null,
-    "email": null,
-    "password": null,
-    "googleId": "110356809640558894264",
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 19,
-    "userName": "newDude",
-    "email": "newDude@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 300
-  },
-  {
-    "mgUserId": 20,
-    "userName": "toastTest",
-    "email": "toastTest@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 21,
-    "userName": null,
-    "email": "username@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 22,
-    "userName": "thisDude",
-    "email": "thisdude@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 23,
-    "userName": "eric05sept!",
-    "email": "eric05sept@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 24,
-    "userName": "thisGuy05sept",
-    "email": "thisguy@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 25,
-    "userName": "skyderman",
-    "email": "skyjust@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 18
-  },
-  {
-    "mgUserId": 26,
-    "userName": null,
-    "email": "email@email.com",
-    "password": "12345678",
-    "googleId": null,
     "facebookId": null,
     "totalPoints": 0
   }
