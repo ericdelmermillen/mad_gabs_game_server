@@ -100,10 +100,28 @@
   },
   {
     "mgUserId": 12,
-    "userName": null,
+    "userName": "personalEric",
     "email": null,
     "password": null,
     "googleId": "105807361221685176765",
+    "facebookId": null,
+    "totalPoints": 2071
+  },
+  {
+    "mgUserId": 13,
+    "userName": null,
+    "email": "sept092023@mail.com",
+    "password": "123",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 0
+  },
+  {
+    "mgUserId": 14,
+    "userName": null,
+    "email": "auth1@mail.com",
+    "password": "123",
+    "googleId": null,
     "facebookId": null,
     "totalPoints": 0
   }

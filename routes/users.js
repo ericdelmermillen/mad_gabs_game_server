@@ -15,8 +15,11 @@ usersRouter.
 
 usersRouter.post("/username", (req, res) => {
   const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
+  console.log("from userName")
 
-  console.log("headers.authorization: ", req.headers.authorization.split(" "))
+  // console.log(req.headers)
+
+  // console.log("headers.authorization: ", req.headers.authorization.split(" "))
 
   // validate jwt; if not valid  
 

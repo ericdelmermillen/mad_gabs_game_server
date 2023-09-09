@@ -40,7 +40,6 @@ router.post("/user/signup", (req, res) => {
       });
     }
 
-
     const newUser = {
       mgUserId: userData.length + 1,
       userName: null,
@@ -124,6 +123,8 @@ router.post("/user/login", (req, res) => {
     user.userName = matchedUser.userName;
     user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
     const token = jwt.sign(user, 'yourSecretKey', { expiresIn: '5m' });
+
+    console.log(token)
 
     res.json({
       success: true,
