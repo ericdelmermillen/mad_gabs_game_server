@@ -17,7 +17,7 @@ router.post("/user/signup", (req, res) => {
 
   if (!req.body.email || !req.body.password) {
     return res.status(401).json({
-      message: "Missing email or password",
+      message: "Missing email or password"
     });
   }
 

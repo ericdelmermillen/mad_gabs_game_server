@@ -8,7 +8,6 @@ const getPoints = (secondsRemaining) => {
 // console.log(getPoints(6))
 
 
-
 // check if 24 hours have elapsed since previous timestamp
 
 const has24HoursElapsed = (timestamp) => {

@@ -8,7 +8,7 @@ const getRandom = (req, res) => {
     console.log("no token!")
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
   } 
-    const token = req.headers.authorization.split(" ")[1]
+    const token = req.headers.authorization.split(" ")[1];
 
     jwt.verify(token, 'yourSecretKey', (err, decoded) => {
     if (err) {
