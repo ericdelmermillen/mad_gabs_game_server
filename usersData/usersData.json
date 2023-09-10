@@ -105,48 +105,12 @@
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 2635
+    "totalPoints": 1135
   },
   {
     "mgUserId": 13,
     "userName": "auth1",
     "email": "auth1@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 14,
-    "userName": "auth2",
-    "email": "auth2@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 15,
-    "userName": null,
-    "email": "auth3@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 16,
-    "userName": null,
-    "email": "auth4@mail.com",
-    "password": "123",
-    "googleId": null,
-    "facebookId": null,
-    "totalPoints": 0
-  },
-  {
-    "mgUserId": 17,
-    "userName": "auth5",
-    "email": "auth5@mail.com",
     "password": "123",
     "googleId": null,
     "facebookId": null,

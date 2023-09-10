@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const usersController = require("../controllers/users_controller");
 const usersRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 
@@ -29,12 +28,7 @@ usersRouter.post("/username", (req, res) => {
         return;
       }
 
-      const userData = JSON.parse(data);
-      console.log(userData)
-
       const matchedUser = userData.find((user) => user.mgUserId === req.body.mgUserId);
-
-      console.log("matchedUser: ", matchedUser)
 
       const matchedUserRank = [...userData]
         .sort((x, y) =>  y.totalPoints - x.totalPoints)
