@@ -13,6 +13,7 @@ const app = express();
 
 require('dotenv').config();
 
+// google sso cookie
 app.use(
   cookieSession({ name: "session", keys: [process.env.KEY], maxAge: 24 * 60 * 60 * 100 })
 );

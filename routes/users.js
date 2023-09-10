@@ -15,8 +15,7 @@ usersRouter.post("/username", (req, res) => {
 
   const token = req.headers.authorization.split(" ")[1];
 
-  // validate jwt; if not valid
-  jwt.verify(token, 'yourSecretKey', (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.log("Invalid token!");
       return res.status(401).json({ message: 'Unauthorized - Invalid token' });
@@ -28,6 +27,8 @@ usersRouter.post("/username", (req, res) => {
         return;
       }
 
+      const userData = JSON.parse(data);
+
       const matchedUser = userData.find((user) => user.mgUserId === req.body.mgUserId);
 
       const matchedUserRank = [...userData]
@@ -35,7 +36,6 @@ usersRouter.post("/username", (req, res) => {
         .findIndex((user) => user.mgUserId === req.body.mgUserId);
 
       matchedUser.userName = req.body.userName;
-      // matchedUser.userName = "Joe";
 
       fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
         if (writeErr) {
@@ -70,7 +70,7 @@ usersRouter.post('/post-points', (req, res) => {
 
     const token = req.headers.authorization.split(" ")[1];
     
-    jwt.verify(token, 'yourSecretKey', (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         console.log("Invalid token!");
         return res.status(401).json({ message: 'Unauthorized - Invalid token' });

@@ -1,6 +1,4 @@
 const fs = require('fs');
-// const { promisify } = require('util');
-// const readFileAsync = promisify(fs.readFile);
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
@@ -18,11 +16,10 @@ submitRouter.route('/gab')
     if(!req.headers.authorization) {
       return res.status(401).json({ message: 'Unauthorized - No token provided' });
     } else {
-
       
       const token = req.headers.authorization.split(" ")[1];
       
-      jwt.verify(token, 'yourSecretKey', (err, decoded) => {
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
           console.log("Invalid token!");
           return res.status(401).json({ message: 'Unauthorized - Invalid token' });

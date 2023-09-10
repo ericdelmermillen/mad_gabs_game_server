@@ -9,6 +9,9 @@ const passport = require("passport");
 
 const CLIENT_URL = "http://localhost:3000/";
 
+const getToken = (user) => {
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '15m' })
+}
 
 // *** user email signup path begins
 router.post("/user/signup", (req, res) => {
@@ -48,10 +51,8 @@ router.post("/user/signup", (req, res) => {
       totalPoints: 0,
     };
 
-
-    // Sign the JWT with a secret key (replace 'yourSecretKey' with your actual secret key)
-    const token = jwt.sign(newUser, 'yourSecretKey', { expiresIn: '15m' });
-
+    const token = getToken(newUser);
+    
     userData.push(newUser);
 
     fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
@@ -75,7 +76,6 @@ router.post("/user/signup", (req, res) => {
 // *** user email login path begins
 router.post("/user/login", (req, res) => {
 
-  // console.log(first)
   if(!req.body.email || !req.body.password) {
     return res.status(401).json({
       message: "Missing email or password",
@@ -94,7 +94,6 @@ router.post("/user/login", (req, res) => {
     const matchedUser = userData.find((user) => user.email === req.body.email);
 
     if (!matchedUser) {
-      // User not found, send a "user not found" message
       return res.status(404).json({
         success: false,
         message: "User with that email not found",
@@ -110,8 +109,6 @@ router.post("/user/login", (req, res) => {
       });
     }
 
-    // genereate jwt for email sign in users and attach
-
     const matchedUserRank = [...userData]
     .sort((x, y) =>  y.totalPoints - x.totalPoints)
     .findIndex((user) => user.email === matchedUser.email);
@@ -121,7 +118,7 @@ router.post("/user/login", (req, res) => {
     user.totalPoints = matchedUser.totalPoints;
     user.userName = matchedUser.userName;
     user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
-    const token = jwt.sign(user, 'yourSecretKey', { expiresIn: '15m' });
+    const token = getToken(user);
 
     res.json({
       success: true,
@@ -168,7 +165,7 @@ router.get("/login/success", (req, res) => {
             return res.status(500).json({ error: "Failed to update user data" });
           }
 
-          const token = jwt.sign(newUser, 'yourSecretKey', { expiresIn: '15m' });
+          const token = getToken(newUser);
 
           res.json({
             success: true,
@@ -184,15 +181,13 @@ router.get("/login/success", (req, res) => {
           .sort((x, y) =>  y.totalPoints - x.totalPoints)
           .findIndex((user) => user.googleId === matchedUser.googleId);
 
-          
           user = {};
           user.mgUserId = matchedUser.mgUserId;
           user.totalPoints = matchedUser.totalPoints;
           user.userName = matchedUser.userName;
           user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
           
-        // genereate jwt for google users and attach
-        const token = jwt.sign(user, 'yourSecretKey', { expiresIn: '15m' });
+        const token = getToken(user);
 
         res.json({
           success: true,
@@ -228,14 +223,14 @@ router.get(
 // *** google sso ends
 
 
-router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
+// router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));
 
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
-);
+// router.get(
+//   "/facebook/callback",
+//   passport.authenticate("facebook", {
+//     successRedirect: CLIENT_URL,
+//     failureRedirect: "/login/failed",
+//   })
+// );
 
 module.exports = router
