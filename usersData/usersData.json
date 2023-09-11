@@ -105,6 +105,15 @@
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 371
+    "totalPoints": 376
+  },
+  {
+    "mgUserId": 13,
+    "userName": "auth1",
+    "email": "auth1@mail.com",
+    "password": "$2b$10$OVKdgKShbJ092yu5zQ9X.uNQnGcg67ibHrxX1JPNaDABI/53.oobe",
+    "googleId": null,
+    "facebookId": null,
+    "totalPoints": 1324
   }
 ]

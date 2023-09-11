@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const router = require("express").Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
 
@@ -14,7 +15,7 @@ const getToken = (user) => {
 }
 
 // *** user email signup path begins
-router.post("/user/signup", (req, res) => {
+router.post("/user/signup", async (req, res) => { // Make the route handler async
 
   if (!req.body.email || !req.body.password) {
     return res.status(401).json({
@@ -22,11 +23,8 @@ router.post("/user/signup", (req, res) => {
     });
   }
 
-  fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
-    if (readErr) {
-      console.error('Error reading user data:', readErr);
-      return res.status(500).json({ error: "Failed to read user data" });
-    }
+  try {
+    const data = await fs.promises.readFile(userDataFilePath, 'utf8'); // Use async/await for reading file
 
     const userData = JSON.parse(data);
 
@@ -45,49 +43,49 @@ router.post("/user/signup", (req, res) => {
       mgUserId: userData.length + 1,
       userName: null,
       email: req.body.email,
-      password: req.body.password,
+      password: await bcrypt.hash(req.body.password, 10), 
       googleId: null,
       facebookId: null,
       totalPoints: 0,
     };
 
     const token = getToken(newUser);
-    
+
     userData.push(newUser);
 
-    fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
-      if (writeErr) {
-        console.error('Error writing user data:', writeErr);
-        return res.status(500).json({ error: "Failed to update user data" });
-      }
+    await fs.promises.writeFile(userDataFilePath, JSON.stringify(userData, null, 2));
 
-      res.json({
-        success: true,
-        message: "User created successfully",
-        user: newUser,
-        token: token
-      });
+    res.json({
+      success: true,
+      message: "User created successfully",
+      user: newUser,
+      token: token
     });
-  });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: "Failed to update user data" });
+  }
 });
-// *** user email signup path ends
+
 
 
 // *** user email login path begins
 router.post("/user/login", (req, res) => {
 
-  if(!req.body.email || !req.body.password) {
+  if (!req.body.email || !req.body.password) {
     return res.status(401).json({
       message: "Missing email or password",
     });
   }
 
-   // Read the user data from the JSON file
-   fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
+  // Read the user data from the JSON file
+  fs.readFile(userDataFilePath, 'utf8', async (readErr, data) => { // Make the callback async
+
     if (readErr) {
       console.error('Error reading user data:', readErr);
       return res.status(500).json({ error: "Failed to read user data" });
     }
+
     const userData = JSON.parse(data);
 
     // Check if the user with the provided email exists
@@ -100,8 +98,10 @@ router.post("/user/login", (req, res) => {
       });
     }
 
-    // Check if the provided password matches the stored password
-    if (matchedUser.password !== req.body.password) {
+    // Compare the provided password with the stored hashed password
+    const passwordMatch = await bcrypt.compare(req.body.password, matchedUser.password);
+
+    if (!passwordMatch) {
       // Passwords do not match, send an "incorrect password" message
       return res.status(401).json({
         success: false,
@@ -110,10 +110,10 @@ router.post("/user/login", (req, res) => {
     }
 
     const matchedUserRank = [...userData]
-    .sort((x, y) =>  y.totalPoints - x.totalPoints)
-    .findIndex((user) => user.email === matchedUser.email);
-    
-    user = {};
+      .sort((x, y) => y.totalPoints - x.totalPoints)
+      .findIndex((user) => user.email === matchedUser.email);
+
+    const user = {};
     user.mgUserId = matchedUser.mgUserId;
     user.totalPoints = matchedUser.totalPoints;
     user.userName = matchedUser.userName;
