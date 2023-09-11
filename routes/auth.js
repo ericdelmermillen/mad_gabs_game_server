@@ -24,7 +24,7 @@ router.post("/user/signup", async (req, res) => { // Make the route handler asyn
   }
 
   try {
-    const data = await fs.promises.readFile(userDataFilePath, 'utf8'); // Use async/await for reading file
+    const data = await fs.promises.readFile(userDataFilePath, 'utf8'); 
 
     const userData = JSON.parse(data);
 
@@ -68,7 +68,6 @@ router.post("/user/signup", async (req, res) => { // Make the route handler asyn
 });
 
 
-
 // *** user email login path begins
 router.post("/user/login", (req, res) => {
 
@@ -79,7 +78,7 @@ router.post("/user/login", (req, res) => {
   }
 
   // Read the user data from the JSON file
-  fs.readFile(userDataFilePath, 'utf8', async (readErr, data) => { // Make the callback async
+  fs.readFile(userDataFilePath, 'utf8', async (readErr, data) => {
 
     if (readErr) {
       console.error('Error reading user data:', readErr);
