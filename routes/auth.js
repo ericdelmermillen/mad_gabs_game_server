@@ -70,7 +70,6 @@ router.post("/user/login", async (req, res) => {
   try {
     const matchedUser = await knex('users').where({ email }).first();
     const usersDotLength = await knex("users");
-    console.log("usersDotLength: ", usersDotLength)
 
     if (!matchedUser) {
       return res.status(404).json({
@@ -134,10 +133,6 @@ router.get("/login/success", async (req, res) => {
           googleId: req.user.id,
           facebookId: null,
           totalPoints: 0,
-          ranking: {
-            userRank: matchedUserRank[0]['count(*)'] + 1,
-            totalPlayers: usersDotLength.length
-          }
         };
 
         const [mgUserId] = await knex('users').insert(newUser);
@@ -161,11 +156,12 @@ router.get("/login/success", async (req, res) => {
           totalPoints: userData.totalPoints,
           userName: userData.userName,
           ranking: {
-            userRank: matchedUserRank[0]['count(*)'] + 1,
+            userRank: userData.totalPoints > 0 
+              ? matchedUserRank[0]['count(*)'] + 1
+              : usersDotLength.length,
             totalPlayers: usersDotLength.length
           }
         };
-        
         
         const token = getToken(user);
 
