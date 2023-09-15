@@ -21,13 +21,15 @@ router.post("/user/signup", async (req, res) => {
 
   try {
     const userExists = await knex('users').where({ email }).first();
-
+    
     if (userExists) {
       return res.status(409).json({
         success: false,
         message: "User with that email already exists",
       });
     }
+    
+    const usersDotLength = await knex("users");
 
     const newUser = {
       userName: null,
@@ -35,12 +37,18 @@ router.post("/user/signup", async (req, res) => {
       password: await bcrypt.hash(password, 10), 
       googleId: null,
       facebookId: null,
-      totalPoints: 0,
+      totalPoints: 0
     };
 
     const [mgUserId] = await knex('users').insert(newUser);
 
     const user = { mgUserId, ...newUser };
+    
+    user.ranking = {
+      userRank: usersDotLength.length,
+      totalPlayers: usersDotLength.length
+      }
+
     const token = getToken(user);
 
     res.json({
@@ -61,6 +69,8 @@ router.post("/user/login", async (req, res) => {
 
   try {
     const matchedUser = await knex('users').where({ email }).first();
+    const usersDotLength = await knex("users");
+    console.log("usersDotLength: ", usersDotLength)
 
     if (!matchedUser) {
       return res.status(404).json({
@@ -87,7 +97,11 @@ router.post("/user/login", async (req, res) => {
     user.mgUserId = matchedUser.mgUserId;
     user.totalPoints = matchedUser.totalPoints;
     user.userName = matchedUser.userName;
-    user.ranking = { userRank: matchedUserRank.count + 1, totalPlayers: matchedUserRank.count };
+    user.ranking = {
+      userRank: matchedUserRank.count + 1,
+      totalPlayers: usersDotLength.length
+      };
+    
     const token = getToken(user);
 
     res.json({
@@ -110,6 +124,8 @@ router.get("/login/success", async (req, res) => {
         .where('googleId', req.user.id)
         .first();
 
+      const usersDotLength = await knex("users");
+
       if (!userData) {
         const newUser = {
           userName: null,
@@ -118,6 +134,10 @@ router.get("/login/success", async (req, res) => {
           googleId: req.user.id,
           facebookId: null,
           totalPoints: 0,
+          ranking: {
+            userRank: matchedUserRank[0]['count(*)'] + 1,
+            totalPlayers: usersDotLength.length
+          }
         };
 
         const [mgUserId] = await knex('users').insert(newUser);
@@ -142,9 +162,10 @@ router.get("/login/success", async (req, res) => {
           userName: userData.userName,
           ranking: {
             userRank: matchedUserRank[0]['count(*)'] + 1,
-            totalPlayers: matchedUserRank[0]['count(*)'] + 1
+            totalPlayers: usersDotLength.length
           }
         };
+        
         
         const token = getToken(user);
 
