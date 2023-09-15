@@ -3,6 +3,7 @@ const path = require('path');
 const router = require("express").Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const knex = require("knex")(require("../knexfile"));
 
 const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
 

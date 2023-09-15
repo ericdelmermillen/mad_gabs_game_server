@@ -5,8 +5,7 @@ exports.up = function (knex) {
     table.string('question').notNullable();
     table.string('answer').notNullable();
     table.string('level').notNullable();
-  })
-}
+  })}
 
 exports.down = function (knex) {
   return knex.schema.dropTable('gabs');
