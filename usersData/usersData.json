@@ -7,5 +7,14 @@
     "googleId": null,
     "facebookId": null,
     "totalPoints": 0
+  },
+  {
+    "mgUserId": 2,
+    "userName": "personalEric",
+    "email": null,
+    "password": null,
+    "googleId": "105807361221685176765",
+    "facebookId": null,
+    "totalPoints": 0
   }
 ]

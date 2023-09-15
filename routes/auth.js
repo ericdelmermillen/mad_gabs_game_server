@@ -70,26 +70,13 @@ router.post("/user/signup", async (req, res) => { // Make the route handler asyn
 
 
 // *** user email login path begins
-router.post("/user/login", (req, res) => {
+router.post("/user/login", async (req, res) => {
+  const { email, password } = req.body;
 
-  if (!req.body.email || !req.body.password) {
-    return res.status(401).json({
-      message: "Missing email or password",
-    });
-  }
+  try {
+    const matchedUser = await knex('users').where({ email }).first();
 
-  // Read the user data from the JSON file
-  fs.readFile(userDataFilePath, 'utf8', async (readErr, data) => {
-
-    if (readErr) {
-      console.error('Error reading user data:', readErr);
-      return res.status(500).json({ error: "Failed to read user data" });
-    }
-
-    const userData = JSON.parse(data);
-
-    // Check if the user with the provided email exists
-    const matchedUser = userData.find((user) => user.email === req.body.email);
+    console.log(matchedUser)
 
     if (!matchedUser) {
       return res.status(404).json({
@@ -98,26 +85,25 @@ router.post("/user/login", (req, res) => {
       });
     }
 
-    // Compare the provided password with the stored hashed password
-    const passwordMatch = await bcrypt.compare(req.body.password, matchedUser.password);
+    const passwordMatch = await bcrypt.compare(password, matchedUser.password);
 
     if (!passwordMatch) {
-      // Passwords do not match, send an "incorrect password" message
       return res.status(401).json({
         success: false,
         message: "Incorrect password",
       });
     }
 
-    const matchedUserRank = [...userData]
-      .sort((x, y) => y.totalPoints - x.totalPoints)
-      .findIndex((user) => user.email === matchedUser.email);
+    const matchedUserRank = await knex('users')
+      .count('*')
+      .where('totalPoints', '>', matchedUser.totalPoints)
+      .first();
 
     const user = {};
     user.mgUserId = matchedUser.mgUserId;
     user.totalPoints = matchedUser.totalPoints;
     user.userName = matchedUser.userName;
-    user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+    user.ranking = { userRank: matchedUserRank.count + 1, totalPlayers: matchedUserRank.count };
     const token = getToken(user);
 
     res.json({
@@ -126,8 +112,70 @@ router.post("/user/login", (req, res) => {
       user: user,
       token: token
     });
-  });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: "An error occurred while logging in" });
+  }
 });
+
+// // *** user email login path begins
+// router.post("/user/login", (req, res) => {
+  
+//   if (!req.body.email || !req.body.password) {
+//     return res.status(401).json({
+//       message: "Missing email or password",
+//     });
+//   }
+
+//   // Read the user data from the JSON file
+//   fs.readFile(userDataFilePath, 'utf8', async (readErr, data) => {
+
+//     if (readErr) {
+//       console.error('Error reading user data:', readErr);
+//       return res.status(500).json({ error: "Failed to read user data" });
+//     }
+
+//     const userData = JSON.parse(data);
+
+//     // Check if the user with the provided email exists
+//     const matchedUser = userData.find((user) => user.email === req.body.email);
+
+//     if (!matchedUser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User with that email not found",
+//       });
+//     }
+
+//     const passwordMatch = await bcrypt.compare(req.body.password, matchedUser.password);
+
+//     if (!passwordMatch) {
+
+//       return res.status(401).json({
+//         success: false,
+//         message: "Incorrect password",
+//       });
+//     }
+
+//     const matchedUserRank = [...userData]
+//       .sort((x, y) => y.totalPoints - x.totalPoints)
+//       .findIndex((user) => user.email === matchedUser.email);
+
+//     const user = {};
+//     user.mgUserId = matchedUser.mgUserId;
+//     user.totalPoints = matchedUser.totalPoints;
+//     user.userName = matchedUser.userName;
+//     user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
+//     const token = getToken(user);
+
+//     res.json({
+//       success: true,
+//       message: "Login successful",
+//       user: user,
+//       token: token
+//     });
+//   });
+// });
 
 
 // *** google success path begins
