@@ -87,7 +87,7 @@
     "password": "",
     "googleId": "107927815895635598617",
     "facebookId": null,
-    "totalPoints": 9113
+    "totalPoints": 19483
   },
   {
     "mgUserId": 11,
@@ -105,15 +105,24 @@
     "password": null,
     "googleId": "105807361221685176765",
     "facebookId": null,
-    "totalPoints": 376
+    "totalPoints": 930
   },
   {
     "mgUserId": 13,
-    "userName": "auth1",
-    "email": "auth1@mail.com",
-    "password": "$2b$10$OVKdgKShbJ092yu5zQ9X.uNQnGcg67ibHrxX1JPNaDABI/53.oobe",
+    "userName": "mitchell",
+    "email": null,
+    "password": null,
+    "googleId": "118181762692283195049",
+    "facebookId": null,
+    "totalPoints": 300
+  },
+  {
+    "mgUserId": 14,
+    "userName": "auth4",
+    "email": "auth4@mail.com",
+    "password": "$2b$10$yfT99nKpT4UFuhxcEJHlrOrBO0xAHS9By6asLl8km8KMywuruW7FW",
     "googleId": null,
     "facebookId": null,
-    "totalPoints": 1324
+    "totalPoints": 0
   }
 ]
