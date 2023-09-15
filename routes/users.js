@@ -2,64 +2,52 @@ const fs = require('fs');
 const path = require('path');
 const usersRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
+const knex = require("knex")(require("../knexfile"));
 
 const { getPoints } = require('../utils/utilFunctions.js');
 
-usersRouter.post("/username", (req, res) => {
-  const userDataFilePath = path.join(__dirname, '../usersData/usersData.json');
+// users/username path begins *** mysql
+usersRouter.post("/username", async (req, res) => {
+  const userName = req.body.userName;
+  const mgUserId = req.body.mgUserId;
 
-  if(!req.headers.authorization) {
-    console.log("no token!")
-    return res.status(401).json({ message: 'Unauthorized - No token provided' });
-  } 
+  try {
+    const updatedUser = await knex('users')
+      .where('mgUserId', mgUserId)
+      .update({ userName });
 
-  const token = req.headers.authorization.split(" ")[1];
+    if (updatedUser) {
+      const [user] = await knex('users')
+        .select('mgUserId', 'totalPoints', 'userName')
+        .where('mgUserId', mgUserId);
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.log("Invalid token!");
-      return res.status(401).json({ message: 'Unauthorized - Invalid token' });
-    } else
+      const matchedUserRank = await knex('users')
+        .count('*')
+        .where('totalPoints', '>', user.totalPoints);
 
-    fs.readFile(userDataFilePath, 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+      user.ranking = {
+        userRank: matchedUserRank[0]['count(*)'] + 1,
+        totalPlayers: matchedUserRank[0]['count(*)'] + 1
+      };
 
-      const userData = JSON.parse(data);
-
-      const matchedUser = userData.find((user) => user.mgUserId === req.body.mgUserId);
-
-      const matchedUserRank = [...userData]
-        .sort((x, y) =>  y.totalPoints - x.totalPoints)
-        .findIndex((user) => user.mgUserId === req.body.mgUserId);
-
-      matchedUser.userName = req.body.userName;
-
-      fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
-        if (writeErr) {
-          console.error(writeErr);
-          return;
-        }
-
-        res.user = {};
-        res.user.mgUserId = matchedUser.mgUserId;
-        res.user.totalPoints = matchedUser.totalPoints;
-        res.user.userName = matchedUser.userName;
-        res.user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
-
-        res.json({
-          success: true,
-          message: "Username updated successfully",
-          user: res.user,
-        });
+      res.json({
+        success: true,
+        message: "Username updated successfully",
+        user,
       });
-    });
-  });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ error: "Failed to update username" });
+  }
 });
 
-
+// post-points begins
 usersRouter.post('/post-points', (req, res) => {
   const mgUserId = req.body.mgUserId;
   const secondsRemaining = req.body.secondsRemaining;

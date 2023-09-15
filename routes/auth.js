@@ -102,27 +102,17 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
-
-// *** google success path begins
-router.get("/login/success", (req, res) => {
+// google sso path *** mysql
+router.get("/login/success", async (req, res) => {
   if (req.user) {
+    try {
+      const userData = await knex('users')
+        .where('googleId', req.user.id)
+        .first();
 
-    console.log("from /login/success")
-
-    fs.readFile(userDataFilePath, 'utf8', (readErr, data) => {
-      if (readErr) {
-        console.error('Error reading user data:', readErr);
-        return res.status(500).json({ error: "Failed to read user data" });
-      }
-
-      const userData = JSON.parse(data);
-
-      const userExists = userData.some((user) => user.googleId == req.user.id);
-  
-      if (!userExists) {
+      if (!userData) {
         const newUser = {
-          mgUserId: userData.length +1,
-          userName: null, 
+          userName: null,
           email: null,
           password: null,
           googleId: req.user.id,
@@ -130,36 +120,32 @@ router.get("/login/success", (req, res) => {
           totalPoints: 0,
         };
 
-        userData.push(newUser);
+        const [mgUserId] = await knex('users').insert(newUser);
+        newUser.mgUserId = mgUserId;
 
-        fs.writeFile(userDataFilePath, JSON.stringify(userData, null, 2), (writeErr) => {
-          if (writeErr) {
-            console.error('Error writing user data:', writeErr);
-            return res.status(500).json({ error: "Failed to update user data" });
-          }
+        const token = getToken(newUser);
 
-          const token = getToken(newUser);
-
-          res.json({
-            success: true,
-            message: "Logged in successfully",
-            user: newUser,
-            token: token
-          });
+        res.json({
+          success: true,
+          message: "Logged in successfully",
+          user: newUser,
+          token: token
         });
-        } else {
-          const matchedUser = userData.find((user) => user.googleId === req.user.id);
+      } else {
+        const matchedUserRank = await knex('users')
+          .count('*')
+          .where('totalPoints', '>', userData.totalPoints);
 
-        const matchedUserRank = [...userData]
-          .sort((x, y) =>  y.totalPoints - x.totalPoints)
-          .findIndex((user) => user.googleId === matchedUser.googleId);
-
-          user = {};
-          user.mgUserId = matchedUser.mgUserId;
-          user.totalPoints = matchedUser.totalPoints;
-          user.userName = matchedUser.userName;
-          user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
-          
+        const user = {
+          mgUserId: userData.mgUserId,
+          totalPoints: userData.totalPoints,
+          userName: userData.userName,
+          ranking: {
+            userRank: matchedUserRank[0]['count(*)'] + 1,
+            totalPlayers: matchedUserRank[0]['count(*)'] + 1
+          }
+        };
+        
         const token = getToken(user);
 
         res.json({
@@ -169,7 +155,10 @@ router.get("/login/success", (req, res) => {
           user: user,
         });
       }
-    });
+    } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ error: "Failed to update user data" });
+    }
   } else {
     res.status(404).json({
       success: false,
@@ -180,6 +169,7 @@ router.get("/login/success", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
+  // delete jwt on logout from session storage
   req.logout();
   res.redirect(CLIENT_URL);
 });
