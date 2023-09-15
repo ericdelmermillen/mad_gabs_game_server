@@ -15,25 +15,14 @@ const getToken = (user) => {
   return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '15m' })
 }
 
-// *** user email signup path begins
-router.post("/user/signup", async (req, res) => { // Make the route handler async
-
-  if (!req.body.email || !req.body.password) {
-    return res.status(401).json({
-      message: "Missing email or password"
-    });
-  }
+// user email signup path begins *** mySQL
+router.post("/user/signup", async (req, res) => { 
+  const { email, password } = req.body;
 
   try {
-    const data = await fs.promises.readFile(userDataFilePath, 'utf8'); 
-
-    const userData = JSON.parse(data);
-
-    // Check if the user with the provided email already exists
-    const userExists = userData.some((user) => user.email === req.body.email);
+    const userExists = await knex('users').where({ email }).first();
 
     if (userExists) {
-      // User with that email already exists, send a "user exists" message
       return res.status(409).json({
         success: false,
         message: "User with that email already exists",
@@ -41,42 +30,37 @@ router.post("/user/signup", async (req, res) => { // Make the route handler asyn
     }
 
     const newUser = {
-      mgUserId: userData.length + 1,
       userName: null,
-      email: req.body.email,
-      password: await bcrypt.hash(req.body.password, 10), 
+      email: email,
+      password: await bcrypt.hash(password, 10), 
       googleId: null,
       facebookId: null,
       totalPoints: 0,
     };
 
-    const token = getToken(newUser);
+    const [mgUserId] = await knex('users').insert(newUser);
 
-    userData.push(newUser);
-
-    await fs.promises.writeFile(userDataFilePath, JSON.stringify(userData, null, 2));
+    const user = { mgUserId, ...newUser };
+    const token = getToken(user);
 
     res.json({
       success: true,
       message: "User created successfully",
-      user: newUser,
+      user: user,
       token: token
     });
   } catch (error) {
     console.error('Error:', error);
-    return res.status(500).json({ error: "Failed to update user data" });
+    return res.status(500).json({ error: "Failed to create user" });
   }
 });
 
-
-// *** user email login path begins
+// *** user email login path begins *** MySQL
 router.post("/user/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const matchedUser = await knex('users').where({ email }).first();
-
-    console.log(matchedUser)
 
     if (!matchedUser) {
       return res.status(404).json({
@@ -117,65 +101,6 @@ router.post("/user/login", async (req, res) => {
     return res.status(500).json({ error: "An error occurred while logging in" });
   }
 });
-
-// // *** user email login path begins
-// router.post("/user/login", (req, res) => {
-  
-//   if (!req.body.email || !req.body.password) {
-//     return res.status(401).json({
-//       message: "Missing email or password",
-//     });
-//   }
-
-//   // Read the user data from the JSON file
-//   fs.readFile(userDataFilePath, 'utf8', async (readErr, data) => {
-
-//     if (readErr) {
-//       console.error('Error reading user data:', readErr);
-//       return res.status(500).json({ error: "Failed to read user data" });
-//     }
-
-//     const userData = JSON.parse(data);
-
-//     // Check if the user with the provided email exists
-//     const matchedUser = userData.find((user) => user.email === req.body.email);
-
-//     if (!matchedUser) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "User with that email not found",
-//       });
-//     }
-
-//     const passwordMatch = await bcrypt.compare(req.body.password, matchedUser.password);
-
-//     if (!passwordMatch) {
-
-//       return res.status(401).json({
-//         success: false,
-//         message: "Incorrect password",
-//       });
-//     }
-
-//     const matchedUserRank = [...userData]
-//       .sort((x, y) => y.totalPoints - x.totalPoints)
-//       .findIndex((user) => user.email === matchedUser.email);
-
-//     const user = {};
-//     user.mgUserId = matchedUser.mgUserId;
-//     user.totalPoints = matchedUser.totalPoints;
-//     user.userName = matchedUser.userName;
-//     user.ranking = { userRank: matchedUserRank + 1, totalPlayers: userData.length };
-//     const token = getToken(user);
-
-//     res.json({
-//       success: true,
-//       message: "Login successful",
-//       user: user,
-//       token: token
-//     });
-//   });
-// });
 
 
 // *** google success path begins
