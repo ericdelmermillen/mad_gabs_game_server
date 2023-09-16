@@ -23,12 +23,16 @@ usersRouter.post("/username", async (req, res) => {
 
       const usersDotLength = await knex("users");
 
-      const matchedUserRank = await knex('users')
-        .count('*')
-        .where('totalPoints', '>', user.totalPoints);
+      const matchedUserRank = usersDotLength
+        .sort((a, b) => b.totalPoints - a.totalPoints)
+        .findIndex(searchedUser => searchedUser.mgUserId === mgUserId);
+
+        console.log("matchedUserRank: ", matchedUserRank)
 
       user.ranking = {
-        userRank: matchedUserRank[0]['count(*)'] + 1,
+        userRank: user.totalPoints > 0 
+          ? matchedUserRank + 1
+          : usersDotLength.length,
         totalPlayers: usersDotLength.length
       };
 
@@ -53,7 +57,6 @@ usersRouter.post("/username", async (req, res) => {
 usersRouter.post('/post-points', async (req, res) => {
   const mgUserId = req.body.mgUserId;
   const secondsRemaining = req.body.secondsRemaining;
-  // console.log("req.body: ", req.body)
 
   if (!req.headers.authorization) {
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
@@ -86,14 +89,21 @@ usersRouter.post('/post-points', async (req, res) => {
 
     const [userData] = await knex('users').select('mgUserId', 'totalPoints', 'userName').where('mgUserId', mgUserId);
 
-    const matchedUserRank = await knex('users')
-      .count('*')
-      .where('totalPoints', '>', userData.totalPoints);
+    const usersDotLength = await knex("users");
+
+    const matchedUserRank = usersDotLength
+      .sort((a, b) => b.totalPoints - a.totalPoints)
+      .findIndex(searchedUser => searchedUser.mgUserId === mgUserId);
+
 
     userData.ranking = {
-      userRank: matchedUserRank[0]['count(*)'] + 1,
-      totalPlayers: matchedUserRank[0]['count(*)'] + 1
+      userRank: userData.totalPoints > 0 
+        ? matchedUserRank + 1
+        : usersDotLength.length,
+      totalPlayers: usersDotLength.length
     };
+
+    userData.points = points;
 
     res.json({
       success: true,

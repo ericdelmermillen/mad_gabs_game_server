@@ -85,10 +85,12 @@ router.post("/user/login", async (req, res) => {
       });
     }
 
-    const matchedUserRank = await knex('users')
-      .count('*')
-      .where('totalPoints', '>', matchedUser.totalPoints)
-      .first();
+
+    const matchedUserRank = usersDotLength
+                              .sort((a, b) => b.totalPoints - a.totalPoints)
+                              .findIndex(user => user.mgUserId === matchedUser.mgUserId);
+
+    console.log("matchedUserRank: ", matchedUserRank)
 
     const user = {};
     user.mgUserId = matchedUser.mgUserId;
@@ -96,7 +98,7 @@ router.post("/user/login", async (req, res) => {
     user.userName = matchedUser.userName;
     user.ranking = {
       userRank: matchedUser.totalPoints > 0 
-        ? "fix this"
+        ? matchedUserRank + 1
         : usersDotLength.length,
       totalPlayers: usersDotLength.length
       };
@@ -148,21 +150,23 @@ router.get("/login/success", async (req, res) => {
           token: token
         });
       } else {
-        const matchedUserRank = await knex('users')
-          .count('*')
-          .where('totalPoints', '>', userData.totalPoints);
 
         const user = {
           mgUserId: userData.mgUserId,
           totalPoints: userData.totalPoints,
-          userName: userData.userName,
-          ranking: {
-            userRank: userData.totalPoints > 0 
-              ? "fix this"
-              : usersDotLength.length,
-            totalPlayers: usersDotLength.length
-          }
+          userName: userData.userName
         };
+
+        const matchedUserRank = usersDotLength
+                                  .sort((a, b) => b.totalPoints - a.totalPoints)
+                                  .findIndex(searchedUser => searchedUser.mgUserId === user.mgUserId);
+
+        user.ranking = {
+          userRank: user.totalPoints > 0 
+            ? matchedUserRank + 1
+            : usersDotLength.length,
+          totalPlayers: usersDotLength.length
+        }
         
         const token = getToken(user);
 
