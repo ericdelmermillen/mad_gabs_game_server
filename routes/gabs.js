@@ -5,7 +5,6 @@ const gabsRouter = express.Router();
 
 
 gabsRouter.route('/').get((req, res) => {
-
   if(!req.headers.authorization) {
     console.log("no token!")
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
@@ -15,7 +14,6 @@ gabsRouter.route('/').get((req, res) => {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {  
     if (err) {
-      console.log("Invalid token!");
       return res.status(401).json({ message: 'Unauthorized - Invalid token' });
     }
 

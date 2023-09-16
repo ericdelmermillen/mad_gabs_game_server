@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const router = require("express").Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -10,10 +10,10 @@ const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/";
 
 const getToken = (user) => {
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '5m' })
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1m' })
 }
 
-// user email signup path begins *** mySQL
+// email signup path
 router.post("/user/signup", async (req, res) => { 
   const { email, password } = req.body;
 
@@ -36,7 +36,7 @@ router.post("/user/signup", async (req, res) => {
       totalPoints: 0
     };
 
-    const [mgUserId] = await knex('users').insert(newUser);
+    const [ mgUserId ] = await knex('users').insert(newUser);
 
     const user = { mgUserId, ...newUser };
 
@@ -61,7 +61,6 @@ router.post("/user/signup", async (req, res) => {
   }
 });
 
-// *** user email login path begins *** MySQL
 router.post("/user/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -85,12 +84,9 @@ router.post("/user/login", async (req, res) => {
       });
     }
 
-
     const matchedUserRank = usersDotLength
-                              .sort((a, b) => b.totalPoints - a.totalPoints)
-                              .findIndex(user => user.mgUserId === matchedUser.mgUserId);
-
-    console.log("matchedUserRank: ", matchedUserRank)
+      .sort((a, b) => b.totalPoints - a.totalPoints)
+      .findIndex(user => user.mgUserId === matchedUser.mgUserId);
 
     const user = {};
     user.mgUserId = matchedUser.mgUserId;
@@ -117,7 +113,7 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
-// google sso path *** mysql
+// google sso path
 router.get("/login/success", async (req, res) => {
   if (req.user) {
     try {
@@ -127,17 +123,17 @@ router.get("/login/success", async (req, res) => {
 
       const usersDotLength = await knex('users');
         
-        if (!userData) {
-          const newUser = {
-            userName: null,
-            email: null,
-            password: null,
-            googleId: req.user.id,
-            facebookId: null,
-            totalPoints: 0,
-          };
+      if (!userData) {
+        const newUser = {
+          userName: null,
+          email: null,
+          password: null,
+          googleId: req.user.id,
+          facebookId: null,
+          totalPoints: 0,
+        };
           
-        const [mgUserId] = await knex('users').insert(newUser);
+        const [ mgUserId ] = await knex('users').insert(newUser);
 
         newUser.mgUserId = mgUserId;
 
@@ -158,8 +154,8 @@ router.get("/login/success", async (req, res) => {
         };
 
         const matchedUserRank = usersDotLength
-                                  .sort((a, b) => b.totalPoints - a.totalPoints)
-                                  .findIndex(searchedUser => searchedUser.mgUserId === user.mgUserId);
+          .sort((a, b) => b.totalPoints - a.totalPoints)
+          .findIndex(searchedUser => searchedUser.mgUserId === user.mgUserId);
 
         user.ranking = {
           userRank: user.totalPoints > 0 
@@ -191,7 +187,6 @@ router.get("/login/success", async (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  // delete jwt on logout from session storage
   req.logout();
   res.redirect(CLIENT_URL);
 });
@@ -205,7 +200,6 @@ router.get(
     failureRedirect: "/login/failed",
   })
 );
-// *** google sso ends
 
 
 // router.get("/facebook", passport.authenticate("facebook", { scope: ["profile"] }));

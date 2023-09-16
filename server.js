@@ -31,8 +31,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/auth", authRoute);
-app.use("/users", usersRouter);
 app.use('/gabs', gabsRouter);
+app.use("/users", usersRouter);
 app.use('/submit', submitRouter);
 
 const port = process.env.PORT;

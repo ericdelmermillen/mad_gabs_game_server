@@ -1,7 +1,7 @@
 {
   "name": "mad_gabs_game_client",
   "version": "1.0.0",
-  "description": "",
+  "description": "A web application for playing the Mad Gabs word game which integrates web speech",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js"

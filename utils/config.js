@@ -6,11 +6,11 @@ const GABS_COLUMNS = [
 ];
 
 const USERS_COLUMNS = [
-  "id",
-  "email",
+  "mgUserId",
   "userName",
-  "accountType",
-  "createdAt",
-  "lastSessionStart",
+  "email",
+  "password",
+  "googleId",
+  "facebookId",
   "totalPoints"
 ];

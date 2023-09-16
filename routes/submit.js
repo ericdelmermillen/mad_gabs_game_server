@@ -1,7 +1,7 @@
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
+// submit gab route
 const submitRouter = require('express').Router();
 
 submitRouter.route('/gab')

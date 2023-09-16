@@ -1,8 +1,8 @@
 // getPoints for when user gets question correct
 const getPoints = (secondsRemaining) => {
   return secondsRemaining > 60 
-          ? 100
-          : Math.round(100 - 100 / 60 * (60 - secondsRemaining)); 
+    ? 100
+    : Math.round(100 - 100 / 60 * (60 - secondsRemaining)); 
 }
 
 // check if 24 hours have elapsed since previous timestamp
