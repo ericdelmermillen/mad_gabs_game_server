@@ -10,7 +10,7 @@ const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/";
 
 const getToken = (user) => {
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '15m' })
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '5m' })
 }
 
 // user email signup path begins *** mySQL
