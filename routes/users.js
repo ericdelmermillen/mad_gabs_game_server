@@ -13,17 +13,24 @@ usersRouter.post("/username", async (req, res) => {
   }
   
   if (!req.headers.authorization) {
-    console.log("no token")
     return res.status(401).json({ message: 'Unauthorized - No token provided' });
   } else {
     const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
-        console.log("Invalid token!");
         return res.status(401).json({ message: 'Unauthorized - Invalid token' });
       }
 
       try {
+        const usernameExists = await knex('users')
+        .where('userName', userName)
+        .whereNot('mgUserId', mgUserId)
+        .first();
+
+      if (usernameExists) {
+        return res.status(409).json({ error: 'Username is already taken' });
+      }
+
         const updatedUser = await knex('users')
           .where('mgUserId', mgUserId)
           .update({ userName });
