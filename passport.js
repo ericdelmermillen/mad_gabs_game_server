@@ -1,22 +1,21 @@
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
+// const FacebookStrategy = require("passport-facebook").Strategy;
 const passport = require("passport");
-
-const GOOGLE_CLIENT_ID='614954374727-55n61iodkc61nkdpmcrbm640fl9utafq.apps.googleusercontent.com'
-const GOOGLE_CLIENT_SECRET = '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'
+require('dotenv').config();
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/auth/google/callback",      proxy: true
+
     },
     function (accessToken, refreshToken, profile, done) {
       done(null, profile);
     }
-    )
-    );
+  )
+);
     
 
 // FACEBOOK_APP_ID = "your id";

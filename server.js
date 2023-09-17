@@ -1,5 +1,6 @@
 const cookieSession = require("cookie-session");
 const express = require("express");
+const proxy = require("proxy-addr");
 const cors = require("cors");
 const passportSetup = require("./passport");
 const passport = require("passport");
@@ -10,6 +11,7 @@ const submitRouter = require("./routes/submit");
 const usersRouter = require("./routes/users");
 
 const app = express();
+app.set("trust proxy", true);
 
 require('dotenv').config();
 
