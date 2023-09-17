@@ -6,7 +6,6 @@ const knex = require("knex")(require("../knexfile"));
 
 const passport = require("passport");
 
-// const CLIENT_URL = "http://localhost:3000/";
 const CLIENT_URL = process.env.CLIENT_URL;
 
 const getToken = (user) => {
