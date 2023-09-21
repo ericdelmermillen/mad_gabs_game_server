@@ -8,8 +8,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",      proxy: true
-
+      callbackURL: "/auth/google/callback", proxy: true
+      // callbackURL: "https://mad-gabs-server-19e85a1994cd.herokuapp.com/auth/google/callback"
     },
     function (accessToken, refreshToken, profile, done) {
       done(null, profile);

@@ -16,8 +16,20 @@ app.set("trust proxy", true);
 require('dotenv').config();
 
 // google sso cookie
+// app.use(
+//   cookieSession({ name: "session", keys: [process.env.KEY], maxAge: 24 * 60 * 60 * 100 })
+// );
+
+
+// google sso cookie
 app.use(
-  cookieSession({ name: "session", keys: [process.env.KEY], maxAge: 24 * 60 * 60 * 100 })
+  cookieSession({ 
+    name: "session", 
+    keys: [process.env.KEY], 
+    maxAge: 24 * 60 * 60 * 100, 
+    secure: true,
+    sameSite: 'none' 
+  })
 );
 
 app.use(passport.initialize());
