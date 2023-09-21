@@ -197,6 +197,8 @@ router.get(
   passport.authenticate("google", {
     successRedirect: CLIENT_URL,
     failureRedirect: "/login/failed",
+  }), ((req, res) => {
+    res.send("Google callback reached no error")
   })
 );
 
