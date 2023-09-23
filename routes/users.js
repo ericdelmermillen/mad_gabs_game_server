@@ -139,5 +139,4 @@ usersRouter.post('/post-points', async (req, res) => {
   });
 });
 
-
 module.exports = usersRouter;
