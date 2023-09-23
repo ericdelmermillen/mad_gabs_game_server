@@ -9,7 +9,7 @@ const passport = require("passport");
 const CLIENT_URL = process.env.CLIENT_URL;
 
 const getToken = (user) => {
-  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '5m' })
+  return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '15m' })
 }
 
 // email signup path
