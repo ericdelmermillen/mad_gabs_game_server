@@ -36,5 +36,4 @@ gabsRouter.route('/').get((req, res) => {
   })
 });
 
-
 module.exports = gabsRouter;
