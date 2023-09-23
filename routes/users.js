@@ -4,11 +4,6 @@ const knex = require("knex")(require("../knexfile"));
 
 const { getPoints } = require('../utils/utilFunctions.js');
 
-usersRouter.get("/", async (req, res) => {
-  res.send("from users")
-  console.log("from users")
-})
-
 // set userName path
 usersRouter.post("/username", async (req, res) => {
   const { mgUserId, userName} = req.body;
