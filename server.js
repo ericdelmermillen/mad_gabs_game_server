@@ -35,13 +35,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// const corsOptions = {
-//   origin: process.env.ORIGIN,
-//   credentials: true
-// }
-
 const corsOptions = {
-  origin: "https://main--stellar-marshmallow-22640e.netlify.app",
+  origin: process.env.ORIGIN,
   credentials: true
 }
 
