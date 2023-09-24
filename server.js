@@ -41,7 +41,7 @@ app.use(passport.session());
 // }
 
 const corsOptions = {
-  origin: "https://main--stellar-marshmallow-22640e.netlify.app/",
+  origin: "https://main--stellar-marshmallow-22640e.netlify.app",
   credentials: true
 }
 
